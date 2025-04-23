@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 
 export default function ProfilePage() {
   const [user, setUser] = useState<User | null>(null);
-  const [points, setPoints] = useState<number>(1200);
+  const points = 1200;
   const router = useRouter();
 
   useEffect(() => {
