@@ -6,10 +6,14 @@ import { TaskItem } from "@/components/TaskItem";
 import { QuestCard } from "@/components/QuestCard";
 import { CountdownTimer } from "@/components/CountdownTimer";
 
-export default async function QuestDetailPage(context: {
-  params: { questID: string };
-}) {
-  const { questID } = context.params;
+type Props = {
+  params: {
+    questID: string;
+  };
+};
+
+export default function QuestDetailPage({ params }: Props) {
+  const questID = params.questID;
   const quest = quests.find((q: Quest) => q.id === questID);
 
   if (!quest) return notFound();
