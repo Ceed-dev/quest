@@ -6,8 +6,9 @@ import { TaskItem } from "@/components/TaskItem";
 import { QuestCard } from "@/components/QuestCard";
 import { CountdownTimer } from "@/components/CountdownTimer";
 
-export default function QuestDetailPage({ params }) {
-  const quest = quests.find((q: Quest) => q.id === params.questID);
+export default function QuestDetailPage(context: { params: { questID: string } }) {
+  const { questID } = context.params;
+  const quest = quests.find((q: Quest) => q.id === questID);
 
   if (!quest) return notFound();
 
