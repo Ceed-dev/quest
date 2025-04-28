@@ -1,19 +1,44 @@
 "use client";
 
+import { useEffect, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { QuestCard } from "@/components/QuestCard";
 import { quests } from "@/data/quests";
 import { client } from "@/lib/client";
-import { ConnectButton } from "thirdweb/react";
+import { ConnectButton, useActiveAccount } from "thirdweb/react";
 import { inAppWallet } from "thirdweb/wallets";
+import { getUserEmail } from "thirdweb/wallets/in-app";
+import { handleCreateUser } from "@/lib/handleCreateUser";
 
 export default function HomePage() {
-  const wallets = [
-    inAppWallet({
-      auth: { options: ["email", "passkey", "google"] },
-    }),
-  ];
+  const wallets = useMemo(
+    () => [
+      inAppWallet({
+        auth: { options: ["email", "google"] },
+      }),
+    ],
+    [],
+  );
+
+  const account = useActiveAccount();
+
+  useEffect(() => {
+    const createUser = async () => {
+      if (account) {
+        const email = await getUserEmail({ client });
+
+        if (email) {
+          await handleCreateUser({
+            walletAddress: account.address,
+            email: email,
+          });
+        }
+      }
+    };
+
+    createUser();
+  }, [account]);
 
   return (
     <div className="p-6 md:p-10 flex flex-col gap-6">
