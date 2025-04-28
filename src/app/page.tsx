@@ -2,21 +2,18 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useAuthCheck } from "@/hooks/useAuthCheck";
-import { logout } from "@/utils/auth";
-import { Button } from "@/components/ui/button";
 import { QuestCard } from "@/components/QuestCard";
 import { quests } from "@/data/quests";
+import { client } from "@/lib/client";
+import { ConnectButton } from "thirdweb/react";
+import { inAppWallet } from "thirdweb/wallets";
 
 export default function HomePage() {
-  useAuthCheck();
-  const router = useRouter();
-
-  const handleLogout = async () => {
-    await logout();
-    router.push("/login");
-  };
+  const wallets = [
+    inAppWallet({
+      auth: { options: ["email", "passkey", "google"] },
+    }),
+  ];
 
   return (
     <div className="p-6 md:p-10 flex flex-col gap-6">
@@ -24,6 +21,9 @@ export default function HomePage() {
         <h1 className="text-2xl font-bold">Token Reward</h1>
 
         <div className="flex items-center gap-4">
+          {/* ConnectButton */}
+          <ConnectButton client={client} wallets={wallets} />
+
           {/* Profile Icon */}
           <Link href="/profile">
             <Image
@@ -34,11 +34,6 @@ export default function HomePage() {
               className="rounded-full border-2 border-black cursor-pointer"
             />
           </Link>
-
-          {/* Logout Button */}
-          <Button onClick={handleLogout} variant="outline">
-            Logout
-          </Button>
         </div>
       </div>
 

@@ -1,45 +1,23 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { auth } from "@/lib/firebase";
-import type { User } from "firebase/auth";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 
 export default function ProfilePage() {
-  const [user, setUser] = useState<User | null>(null);
   const points = 1200;
-  const router = useRouter();
-
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((u) => {
-      if (u) {
-        setUser(u);
-      } else {
-        router.push("/login");
-      }
-    });
-    return () => unsubscribe();
-  }, []);
-
-  if (!user) return null;
 
   return (
     <div className="max-w-xl mx-auto px-6 py-10 space-y-10">
       {/* ユーザー情報 */}
       <div className="flex items-center gap-4">
         <Image
-          src={
-            user.photoURL ||
-            "https://app.questn.com/static/users/cute_squad_3.png"
-          } // fallbackアイコン
+          src={"https://app.questn.com/static/users/cute_squad_3.png"}
           alt="user-icon"
           width={64}
           height={64}
           className="rounded-full border-2 border-black"
         />
         <div>
-          <h2 className="text-lg font-bold">{user.email}</h2>
+          <h2 className="text-lg font-bold">official@ceed.cloud</h2>
           <p className="text-sm text-gray-500">Your registered email</p>
         </div>
       </div>
