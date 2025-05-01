@@ -1,24 +1,45 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { ChevronsUpDown, Plus } from "lucide-react"
-
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+import * as React from "react";
+import Link from "next/link";
+import Image from "next/image";
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "@/components/ui/sidebar"
+} from "@/components/ui/sidebar";
 
+export function TeamSwitcher() {
+  const { state } = useSidebar();
+
+  const isCollapsed = state === "collapsed";
+
+  return (
+    <SidebarMenu>
+      <SidebarMenuItem>
+        <SidebarMenuButton asChild tooltip="Qube Quest">
+          <Link href="/" className="flex items-center gap-2">
+            <div className="size-8 aspect-square flex items-center justify-center rounded-lg bg-sidebar-primary overflow-hidden">
+              <Image
+                src="/qube.png"
+                alt="Qube Logo"
+                width={24}
+                height={24}
+                className="object-contain"
+              />
+            </div>
+            {!isCollapsed && (
+              <span className="text-lg font-semibold">Qube Quest</span>
+            )}
+          </Link>
+        </SidebarMenuButton>
+      </SidebarMenuItem>
+    </SidebarMenu>
+  );
+}
+
+/*
 export function TeamSwitcher({
   teams,
 }: {
@@ -89,3 +110,4 @@ export function TeamSwitcher({
     </SidebarMenu>
   )
 }
+*/
