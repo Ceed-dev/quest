@@ -19,10 +19,13 @@ import { ConnectButton } from "thirdweb/react";
 import { inAppWallet } from "thirdweb/wallets";
 import { client } from "@/lib/client";
 
+import Image from "next/image";
+import Link from "next/link";
+
 import { NavMain } from "@/components/nav-main";
 import { NavProjects } from "@/components/nav-projects";
 import { NavUser } from "@/components/nav-user";
-import { TeamSwitcher } from "@/components/team-switcher";
+//import { TeamSwitcher } from "@/components/team-switcher";
 import {
   Sidebar,
   SidebarContent,
@@ -172,7 +175,20 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <TeamSwitcher teams={data.teams} />
+        <Link
+          href="/"
+          className="flex items-center gap-2 px-3 py-2 hover:opacity-80 transition"
+        >
+          <Image
+            src="/qube.png"
+            alt="Qube Logo"
+            width={24}
+            height={24}
+            className="rounded-sm"
+          />
+          <span className="text-lg font-semibold">Qube Quest</span>
+        </Link>
+        {/* <TeamSwitcher teams={data.teams} /> */}
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
