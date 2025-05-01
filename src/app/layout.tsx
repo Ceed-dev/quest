@@ -3,9 +3,9 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
 import { ThirdwebProvider } from "thirdweb/react";
+import { UserProvider } from "@/providers/user-provider";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
-import { UserInitEffect } from "@/hooks/UserInitEffect";
 import { GlobalHeader } from "@/components/GlobalHeader";
 
 const geistSans = Geist({
@@ -34,14 +34,15 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ThirdwebProvider>
-          <UserInitEffect />
-          <SidebarProvider>
-            <AppSidebar />
-            <SidebarInset>
-              <GlobalHeader />
-              {children}
-            </SidebarInset>
-          </SidebarProvider>
+          <UserProvider>
+            <SidebarProvider>
+              <AppSidebar />
+              <SidebarInset>
+                <GlobalHeader />
+                {children}
+              </SidebarInset>
+            </SidebarProvider>
+          </UserProvider>
         </ThirdwebProvider>
       </body>
     </html>
