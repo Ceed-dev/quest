@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import {
+  /*
   AudioWaveform,
   BookOpen,
   Bot,
@@ -12,6 +13,9 @@ import {
   PieChart,
   Settings2,
   SquareTerminal,
+  */
+  Shield,
+  Briefcase,
 } from "lucide-react";
 
 import { useUser } from "@/providers/user-provider";
@@ -22,19 +26,21 @@ import { client } from "@/lib/client";
 import Image from "next/image";
 import Link from "next/link";
 
-import { NavMain } from "@/components/nav-main";
-import { NavProjects } from "@/components/nav-projects";
+// import { NavMain } from "@/components/nav-main";
+// import { NavProjects } from "@/components/nav-projects";
 import { NavUser } from "@/components/nav-user";
-//import { TeamSwitcher } from "@/components/team-switcher";
+// import { TeamSwitcher } from "@/components/team-switcher";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
   SidebarRail,
+  SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { useMemo } from "react";
 
+/*
 // This is sample data.
 const data = {
   teams: [
@@ -159,6 +165,7 @@ const data = {
     },
   ],
 };
+*/
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { user, loading } = useUser();
@@ -191,8 +198,28 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         {/* <TeamSwitcher teams={data.teams} /> */}
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
+        <ul className="list-none px-2 py-2">
+          <SidebarMenuItem>
+            <Link
+              href="/"
+              className="flex items-center gap-3 px-3 py-2 rounded-md text-sm hover:bg-muted transition"
+            >
+              <Shield className="h-4 w-4" />
+              <span>Quests</span>
+            </Link>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <Link
+              href="/inventory"
+              className="flex items-center gap-3 px-3 py-2 rounded-md text-sm hover:bg-muted transition"
+            >
+              <Briefcase className="h-4 w-4" />
+              <span>Inventory</span>
+            </Link>
+          </SidebarMenuItem>
+        </ul>
+        {/* <NavMain items={data.navMain} />
+        <NavProjects projects={data.projects} /> */}
       </SidebarContent>
       <SidebarFooter>
         {loading || !user ? (
