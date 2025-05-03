@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { ChevronDown } from "lucide-react";
 import type { QuestTask } from "@/types/quest";
 
 type Props = {
@@ -34,14 +35,7 @@ export function TaskItem({ task }: Props) {
             <Image src={iconSrc} alt={task.label} width={20} height={20} />
             <span>{task.label}</span>
           </div>
-          {open && (
-            <Image
-              src="https://app.questn.com/static/svgs/arrow-bottom-white.svg"
-              alt="arrow"
-              width={16}
-              height={16}
-            />
-          )}
+          {open && <ChevronDown className="w-6 h-6 text-white" />}
         </div>
       </div>
 
