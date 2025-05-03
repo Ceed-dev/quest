@@ -2,14 +2,17 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import type { QuestTask } from "@/types/quest";
 
-type Task = {
-  label: string;
-  iconUrl: string;
+type Props = {
+  task: QuestTask;
 };
 
-export function TaskItem({ task }: { task: Task }) {
+export function TaskItem({ task }: Props) {
   const [open, setOpen] = useState(false);
+
+  const platformPrefix = task.type.split("_")[0];
+  const iconSrc = `/${platformPrefix}-white.png`;
 
   return (
     <div className="w-full">
@@ -28,7 +31,7 @@ export function TaskItem({ task }: { task: Task }) {
                       }`}
         >
           <div className="flex items-center gap-3">
-            <Image src={task.iconUrl} alt={task.label} width={20} height={20} />
+            <Image src={iconSrc} alt={task.label} width={20} height={20} />
             <span>{task.label}</span>
           </div>
           {open && (
@@ -41,9 +44,11 @@ export function TaskItem({ task }: { task: Task }) {
           )}
         </div>
       </div>
+
       {open && (
         <div className="border-2 border-black rounded-b-md overflow-hidden">
           <div className="flex gap-4 justify-start items-center p-4">
+            {/* Action Button */}
             <div className="relative w-fit h-fit">
               <div className="absolute top-0 left-0 w-full h-full rounded-md border-2 border-black z-0" />
               <button
@@ -51,15 +56,12 @@ export function TaskItem({ task }: { task: Task }) {
                             items-center gap-2 transition-transform duration-200 ease-in-out transform
                             translate-x-[-4px] translate-y-[-4px] hover:translate-x-0 hover:translate-y-0"
               >
-                <Image
-                  src="https://cdn.questn.com/template/twitter-black.svg"
-                  alt="X"
-                  width={16}
-                  height={16}
-                />
-                Follow
+                <Image src={iconSrc} alt="platform" width={16} height={16} />
+                Go to task
               </button>
             </div>
+
+            {/* Verify Button */}
             <div className="relative w-fit h-fit">
               <div className="absolute top-0 left-0 w-full h-full rounded-md border-2 border-black z-0" />
               <button
