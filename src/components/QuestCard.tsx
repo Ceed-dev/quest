@@ -38,16 +38,11 @@ export function QuestCard({ quest }: Props) {
         >
           <CardHeader className="flex flex-row items-center justify-between p-4 border-b-2 border-black">
             <div className="text-3xl">
-              {quest.reward.amountPerUser}
+              {quest.reward.amountPerUser * quest.reward.slots}
               <span className="text-lg ml-1">points</span>
             </div>
             <div className="w-[40px] h-[40px] rounded-full border-2 border-black flex items-center justify-center bg-white">
-              <Image
-                src={quest.client.logoUrl}
-                alt={quest.client.name}
-                width={40}
-                height={40}
-              />
+              <Image src="/qube.png" alt="Qube Points" width={40} height={40} />
             </div>
           </CardHeader>
 
