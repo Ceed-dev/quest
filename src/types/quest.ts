@@ -15,11 +15,11 @@ export type AggregatedStat = {
   timestamps: {
     first: {
       userId: string;
-      at: Date;
+      at: Date | null;
     };
     last: {
       userId: string;
-      at: Date;
+      at: Date | null;
     };
   };
   byDay: {
