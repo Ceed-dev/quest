@@ -1,7 +1,7 @@
 "use client";
 
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Quest } from "@/data/quests";
+import type { Quest } from "@/types/quest";
 import Image from "next/image";
 import Link from "next/link";
 import { useMemo } from "react";
@@ -38,13 +38,13 @@ export function QuestCard({ quest }: Props) {
         >
           <CardHeader className="flex flex-row items-center justify-between p-4 border-b-2 border-black">
             <div className="text-3xl">
-              {quest.rewardAmount}
-              <span className="text-lg ml-1">{quest.rewardTokenSymbol}</span>
+              {quest.reward.amountPerUser}
+              <span className="text-lg ml-1">points</span>
             </div>
-            <div className="w-[40px] h-[40px] rounded-full border-2 border-black flex items-center justify-center">
+            <div className="w-[40px] h-[40px] rounded-full border-2 border-black flex items-center justify-center bg-white">
               <Image
-                src={quest.rewardTokenIconUrl}
-                alt={quest.rewardTokenSymbol}
+                src={quest.client.logoUrl}
+                alt={quest.client.name}
                 width={40}
                 height={40}
               />
@@ -53,29 +53,25 @@ export function QuestCard({ quest }: Props) {
 
           <CardContent className="px-4 pb-4">
             <div className="flex items-center gap-2 mb-1">
-              <div className="w-[30px] h-[30px] rounded-md border-2 border-black flex items-center justify-center">
+              <div className="w-[30px] h-[30px] rounded-md border-2 border-black flex items-center justify-center bg-white">
                 <Image
-                  src={quest.clientLogoUrl}
-                  alt={quest.clientName}
+                  src={quest.client.logoUrl}
+                  alt={quest.client.name}
                   width={30}
                   height={30}
                   className="rounded-md"
                 />
               </div>
-              <span className="text-sm truncate">{quest.clientName}</span>
+              <span className="text-sm truncate">{quest.client.name}</span>
             </div>
+
             <div className="text-md mb-5 truncate">{quest.title}</div>
 
             <div className="inline-flex items-center gap-1 rounded-full bg-lime-200 px-3 py-1 text-sm text-black">
-              <div className="w-[20px] h-[20px] rounded-full border-2 border-black flex items-center justify-center">
-                <Image
-                  src={quest.rewardTokenIconUrl}
-                  alt="token"
-                  width={20}
-                  height={20}
-                />
-              </div>
-              <span>{quest.highlightText}</span>
+              <span>
+                {quest.tasks.length} task{quest.tasks.length > 1 ? "s" : ""} to
+                complete
+              </span>
             </div>
           </CardContent>
         </Card>
