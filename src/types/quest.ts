@@ -1,3 +1,14 @@
+// Supported task types (expandable in the future)
+export type TaskType = "x_follow" | "x_like" | "x_repost"; // X only for now
+
+// Base structure for one task within a quest
+export type QuestTask = {
+  id: string; // Unique task ID (e.g., "task1")
+  type: TaskType; // Action type (e.g., "x_follow")
+  label: string; // Display label (e.g., "Follow @xxx on X")
+  targetUrl: string; // Link to visit (e.g., tweet or profile)
+};
+
 // Shared stat structure for reward/task progress tracking
 export type AggregatedStat = {
   count: number;
@@ -54,17 +65,13 @@ export type Quest = {
   };
 
   // Task definitions required to complete the quest
-  tasks: {
-    id: string;
-    label: string;
-    iconUrl?: string;
-  }[];
+  tasks: QuestTask[];
 
   // Reward structure for the quest
   reward: {
-    type: "point";               // Currently only supporting "point"
-    amountPerUser: number;       // Reward per user (e.g., 2.1)
-    slots: number;               // Max number of claimable slots
+    type: "point"; // Currently only supporting "point"
+    amountPerUser: number; // Reward per user (e.g., 2.1)
+    slots: number; // Max number of claimable slots
   };
 
   // Aggregated performance statistics
