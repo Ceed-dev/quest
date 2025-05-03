@@ -4,6 +4,7 @@ import "./globals.css";
 
 import { ThirdwebProvider } from "thirdweb/react";
 import { UserProvider } from "@/providers/user-provider";
+import { QuestsProvider } from "@/context/questsContext";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { GlobalHeader } from "@/components/GlobalHeader";
@@ -35,13 +36,15 @@ export default function RootLayout({
       >
         <ThirdwebProvider>
           <UserProvider>
-            <SidebarProvider>
-              <AppSidebar />
-              <SidebarInset>
-                <GlobalHeader />
-                {children}
-              </SidebarInset>
-            </SidebarProvider>
+            <QuestsProvider>
+              <SidebarProvider>
+                <AppSidebar />
+                <SidebarInset>
+                  <GlobalHeader />
+                  {children}
+                </SidebarInset>
+              </SidebarProvider>
+            </QuestsProvider>
           </UserProvider>
         </ThirdwebProvider>
       </body>
