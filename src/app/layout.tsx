@@ -24,13 +24,17 @@ export const metadata: Metadata = {
   description: "Explore and complete quests",
 };
 
+// TODO: Apply a global theme (black base + lime accent) using Tailwind's custom theme config.
+// For now, apply colors individually with Tailwind classes on each page.
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    // TODO: Replace hardcoded tailwind classes with theme tokens once theme setup is stable.
+    // https://ui.shadcn.com/docs/dark-mode/next
+    <html lang="en" className="dark">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

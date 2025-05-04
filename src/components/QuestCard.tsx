@@ -29,26 +29,26 @@ export function QuestCard({ quest }: Props) {
     <Link href={`/quest/${quest.id}`} className="block">
       <div className="relative w-full max-w-xs">
         <div
-          className={`absolute inset-0 rounded-md ${glowColor} border-2 border-black`}
+          className={`absolute inset-0 rounded-md ${glowColor} border-2 border-white`}
         />
 
         <Card
-          className="relative z-10 w-full rounded-md border-2 border-black p-0 overflow-hidden
+          className="relative z-10 w-full rounded-md border-2 border-white p-0 overflow-hidden
           transition-transform hover:-translate-x-1.5 hover:-translate-y-1.5 font-extrabold cursor-pointer"
         >
-          <CardHeader className="flex flex-row items-center justify-between p-4 border-b-2 border-black">
+          <CardHeader className="flex flex-row items-center justify-between p-4 border-b-2 border-white">
             <div className="text-3xl">
               {quest.reward.amountPerUser * quest.reward.slots}
               <span className="text-lg ml-1">points</span>
             </div>
-            <div className="w-[40px] h-[40px] rounded-full border-2 border-black flex items-center justify-center bg-white">
+            <div className="w-[40px] h-[40px] rounded-full border-2 border-white flex items-center justify-center bg-white">
               <Image src="/qube.png" alt="Qube Points" width={40} height={40} />
             </div>
           </CardHeader>
 
           <CardContent className="px-4 pb-4">
             <div className="flex items-center gap-2 mb-1">
-              <div className="w-[30px] h-[30px] rounded-md border-2 border-black flex items-center justify-center bg-white">
+              <div className="w-[30px] h-[30px] rounded-md border-2 border-white flex items-center justify-center bg-white">
                 <Image
                   src={quest.client.logoUrl}
                   alt={quest.client.name}

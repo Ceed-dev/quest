@@ -48,7 +48,7 @@ export function CountdownTimer({ endTime }: CountdownTimerProps) {
   }, [calculateTimeLeft]);
 
   return (
-    <div className="border-2 border-black rounded-md text-center p-6">
+    <div className="border-2 border-white rounded-md text-center p-6">
       <p className="font-bold text-sm mb-2 text-left">Time Remaining:</p>
       <div className="flex justify-center gap-6 text-center">
         {["days", "hours", "minutes", "seconds"].map((unit) => (

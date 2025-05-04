@@ -28,7 +28,7 @@ export default function QuestDetailPage() {
               alt={quest.client.name}
               width={40}
               height={40}
-              className="rounded-md border-2 border-black"
+              className="rounded-md border-2 border-white"
             />
             <h2 className="text-xl font-bold">{quest.client.name}</h2>
           </div>
@@ -50,7 +50,7 @@ export default function QuestDetailPage() {
 
         <h1 className="text-3xl font-extrabold mb-3">{quest.title}</h1>
 
-        <div className="flex items-center gap-3 mb-10 font-bold text-xs">
+        <div className="flex items-center gap-3 mb-10 font-bold text-xs text-black">
           <span className="bg-lime-100 border-2 border-lime-300 rounded-full px-3 py-1">
             Ongoing
           </span>
@@ -74,7 +74,7 @@ export default function QuestDetailPage() {
         </p>
       </div>
 
-      <div className="bg-black w-[2px]" />
+      <div className="bg-white w-[2px]" />
 
       {/* Right column */}
       <div className="space-y-6">
@@ -82,7 +82,7 @@ export default function QuestDetailPage() {
         <div className="space-y-6">
           <div className="flex items-center gap-3">
             <span className="text-xl font-extrabold">Reward</span>
-            <span className="text-sm font-bold px-2 py-0.5 bg-lime-100 border-2 border-lime-300 rounded-full">
+            <span className="text-sm text-black font-bold px-2 py-0.5 bg-lime-100 border-2 border-lime-300 rounded-full">
               {remaining} slots remaining
             </span>
           </div>
@@ -90,7 +90,7 @@ export default function QuestDetailPage() {
           <CountdownTimer endTime={quest.period.end} />
 
           {/* Reward Type Info */}
-          <div className="border-2 border-black rounded-md p-6 space-y-10">
+          <div className="border-2 border-white rounded-md p-6 space-y-10">
             <div className="flex justify-between items-center">
               <div className="text-sm font-bold">Reward Type:</div>
               <div className="flex items-center gap-2 text-lg font-extrabold">
@@ -99,7 +99,7 @@ export default function QuestDetailPage() {
                   alt="Qube Points"
                   width={28}
                   height={28}
-                  className="border-2 border-black rounded-full"
+                  className="border-2 border-white rounded-full"
                 />
                 {quest.reward.amountPerUser} points
               </div>
@@ -118,8 +118,8 @@ export default function QuestDetailPage() {
 
           {/* Claim Button */}
           <div className="relative w-full h-fit">
-            <div className="absolute top-0 left-0 w-full h-full rounded-md border-2 border-black z-0" />
-            <button className="relative z-10 w-full bg-black text-white text-center font-bold py-3 rounded-md transition-transform duration-200 ease-in-out transform translate-x-[-4px] translate-y-[-4px] hover:translate-x-0 hover:translate-y-0">
+            <div className="absolute top-0 left-0 w-full h-full rounded-md border-2 border-white z-0" />
+            <button className="relative z-10 w-full bg-white text-black text-center font-bold py-3 rounded-md transition-transform duration-200 ease-in-out transform translate-x-[-4px] translate-y-[-4px] hover:translate-x-0 hover:translate-y-0">
               Claim Reward
             </button>
           </div>

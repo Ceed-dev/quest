@@ -6,7 +6,6 @@ import { useQuestsContext } from "@/context/questsContext";
 
 export default function HomePage() {
   const { quests, isLoading } = useQuestsContext();
-  console.log("quests:", quests);
 
   return (
     <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
