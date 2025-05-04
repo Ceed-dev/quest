@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useUser } from "@/providers/user-provider";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { updateUserSocialIds } from "@/lib/user";
 
 export default function ProfilePage() {
   const { user } = useUser();
@@ -20,12 +21,27 @@ export default function ProfilePage() {
     if (!user) {
       toast.error("You must be logged in to view your profile.");
       router.push("/");
+      return;
     }
+
+    setXId(user.socialIds.x || "");
+    setDiscordId(user.socialIds.discord || "");
   }, [user, router]);
 
-  const handleSave = () => {
-    // TODO: Save xId and discordId to Firestore user document
-    toast.success("Your IDs have been saved.");
+  const handleSave = async () => {
+    if (!user) return;
+
+    try {
+      await updateUserSocialIds(user, {
+        x: xId,
+        discord: discordId,
+      });
+
+      toast.success("Your IDs have been saved.");
+    } catch (err) {
+      console.error("Failed to save IDs:", err);
+      toast.error("Failed to save your IDs. Please try again.");
+    }
   };
 
   if (!user) return null;

@@ -16,6 +16,10 @@ export async function handleCreateUser({ walletAddress, email }: Params) {
   if (!userSnap.exists()) {
     const newUser: User = {
       email,
+      socialIds: {
+        x: "",
+        discord: "",
+      },
       timestamps: {
         createdAt: new Date(),
         updatedAt: new Date(),
