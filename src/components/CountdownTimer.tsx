@@ -1,10 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 
-export function CountdownTimer({ endTime }: { endTime: string }) {
-  const calculateTimeLeft = () => {
-    const difference = +new Date(endTime) - +new Date();
+type CountdownTimerProps = {
+  endTime: Date;
+};
+
+export function CountdownTimer({ endTime }: CountdownTimerProps) {
+  const calculateTimeLeft = useCallback(() => {
+    const difference = +endTime - +new Date();
+
     let timeLeft = {
       days: "00",
       hours: "00",
@@ -30,7 +35,7 @@ export function CountdownTimer({ endTime }: { endTime: string }) {
     }
 
     return timeLeft;
-  };
+  }, [endTime]);
 
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
 
@@ -40,28 +45,22 @@ export function CountdownTimer({ endTime }: { endTime: string }) {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [endTime]);
+  }, [calculateTimeLeft]);
 
   return (
-    <div className="border-2 border-black rounded-md text-center p-6">
-      <p className="font-bold text-sm mb-2 text-left">Lucky Draw in:</p>
+    <div className="border-2 border-white rounded-md text-center p-6">
+      <p className="font-bold text-sm mb-2 text-left">Time Remaining:</p>
       <div className="flex justify-center gap-6 text-center">
-        <div>
-          <div className="text-2xl font-extrabold">{timeLeft.days}</div>
-          <div className="text-sm font-bold">Days</div>
-        </div>
-        <div>
-          <div className="text-2xl font-extrabold">{timeLeft.hours}</div>
-          <div className="text-sm font-bold">Hours</div>
-        </div>
-        <div>
-          <div className="text-2xl font-extrabold">{timeLeft.minutes}</div>
-          <div className="text-sm font-bold">Minutes</div>
-        </div>
-        <div>
-          <div className="text-2xl font-extrabold">{timeLeft.seconds}</div>
-          <div className="text-sm font-bold">Seconds</div>
-        </div>
+        {["days", "hours", "minutes", "seconds"].map((unit) => (
+          <div key={unit}>
+            <div className="text-2xl font-extrabold">
+              {timeLeft[unit as keyof typeof timeLeft]}
+            </div>
+            <div className="text-sm font-bold">
+              {unit.charAt(0).toUpperCase() + unit.slice(1)}
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
