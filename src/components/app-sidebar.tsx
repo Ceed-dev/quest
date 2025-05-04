@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Shield, Briefcase } from "lucide-react";
+import { Shield, User } from "lucide-react";
 
 import { useUser } from "@/providers/user-provider";
 import { ConnectButton } from "thirdweb/react";
@@ -47,9 +47,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               icon: Shield,
             },
             {
-              title: "Inventory",
-              url: "/inventory",
-              icon: Briefcase,
+              title: "Profile",
+              url: "/profile",
+              icon: User,
             },
           ]}
         />
