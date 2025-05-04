@@ -46,11 +46,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               url: "/",
               icon: Shield,
             },
-            {
-              title: "Profile",
-              url: "/profile",
-              icon: User,
-            },
+            ...(user
+              ? [
+                  {
+                    title: "Profile",
+                    url: "/profile",
+                    icon: User,
+                  },
+                ]
+              : []),
           ]}
         />
         {/* <NavProjects projects={data.projects} /> */}
