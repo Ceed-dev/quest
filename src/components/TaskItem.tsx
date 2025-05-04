@@ -1,15 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import Image from "next/image";
 import { ChevronDown } from "lucide-react";
 import type { QuestTask } from "@/types/quest";
+import { useConnectModal } from "thirdweb/react";
+import { inAppWallet } from "thirdweb/wallets";
+import { useUser } from "@/providers/user-provider";
+import { client } from "@/lib/client";
 
 type Props = {
   task: QuestTask;
 };
 
 export function TaskItem({ task }: Props) {
+  const { user } = useUser();
+  const { connect } = useConnectModal();
   const [open, setOpen] = useState(false);
 
   const platformIconMap: Record<string, string> = {
@@ -20,10 +26,39 @@ export function TaskItem({ task }: Props) {
   const platformPrefix = task.type.split("_")[0];
   const iconSrc = platformIconMap[platformPrefix];
 
+  // TODO: Ensure connect modal uses same config as <ConnectButton>
+  // (email/google only via inAppWallet)
+  const wallets = useMemo(
+    () => [
+      inAppWallet({
+        auth: { options: ["email", "google"] },
+      }),
+    ],
+    [],
+  );
+
+  const handleToggle = async () => {
+    if (!user) {
+      try {
+        const connectedWallet = await connect({ client, wallets });
+
+        if (connectedWallet) {
+          setOpen(true);
+        }
+      } catch (err) {
+        console.warn("User closed the wallet connection modal or rejected the request.", err);
+      }
+
+      return;
+    }
+
+    setOpen(!open);
+  };
+
   return (
     <div className="w-full">
       <div
-        onClick={() => setOpen(!open)}
+        onClick={handleToggle}
         className="relative w-full h-fit cursor-pointer"
       >
         <div className="absolute top-0 left-0 w-full h-full rounded-md border-2 border-white z-0" />
