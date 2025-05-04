@@ -120,7 +120,7 @@ export default function QuestDetailPage() {
           <div className="relative w-full h-fit">
             <div className="absolute top-0 left-0 w-full h-full rounded-md border-2 border-white z-0" />
             <button className="relative z-10 w-full bg-lime-300 text-black text-center font-bold py-3 rounded-md transition-transform duration-200 ease-in-out transform translate-x-[-4px] translate-y-[-4px] hover:translate-x-0 hover:translate-y-0">
-              Claim Reward
+              (WIP) Claim Reward
             </button>
           </div>
         </div>
