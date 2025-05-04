@@ -9,13 +9,15 @@ import { inAppWallet } from "thirdweb/wallets";
 import { useUser } from "@/providers/user-provider";
 import { client } from "@/lib/client";
 import { useRouter } from "next/navigation";
+import { saveTaskVerification } from "@/lib/verifyTask";
 // import { toast } from "react-toastify";
 
 type Props = {
+  questId: string;
   task: QuestTask;
 };
 
-export function TaskItem({ task }: Props) {
+export function TaskItem({ questId, task }: Props) {
   const { user } = useUser();
   const { connect } = useConnectModal();
   const router = useRouter();
@@ -41,8 +43,6 @@ export function TaskItem({ task }: Props) {
     return true;
   };
 
-  // TODO: Ensure connect modal uses same config as <ConnectButton>
-  // (email/google only via inAppWallet)
   const wallets = useMemo(
     () => [
       inAppWallet({
@@ -56,21 +56,33 @@ export function TaskItem({ task }: Props) {
     if (!user) {
       try {
         const connectedWallet = await connect({ client, wallets });
-
-        if (connectedWallet) {
-          setOpen(true);
-        }
+        if (connectedWallet) setOpen(true);
       } catch (err) {
         console.warn(
           "User closed the wallet connection modal or rejected the request.",
           err,
         );
       }
-
       return;
     }
-
     setOpen(!open);
+  };
+
+  const handleVerify = async () => {
+    if (!user) return;
+    const result = await saveTaskVerification(
+      user.walletAddress!,
+      questId,
+      task.id,
+    );
+
+    if (result.alreadyExists) {
+      alert("You've already verified this task.");
+    } else if (result.success) {
+      alert("Verification saved successfully.");
+    } else {
+      alert("Verification failed. Please try again.");
+    }
   };
 
   return (
@@ -127,7 +139,7 @@ export function TaskItem({ task }: Props) {
               <button
                 onClick={() => {
                   if (!handleRequireIdCheck()) return;
-                  // Verify処理をここに追加
+                  handleVerify();
                 }}
                 className="relative z-10 bg-lime-300 font-bold py-2 px-6 rounded-md text-black border-2 border-white
   transition-transform duration-200 ease-in-out transform

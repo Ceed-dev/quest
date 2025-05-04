@@ -63,7 +63,7 @@ export default function QuestDetailPage() {
 
         <div className="space-y-5 mb-10">
           {quest.tasks.map((task, i) => (
-            <TaskItem key={i} task={task} />
+            <TaskItem key={i} questId={questID} task={task} />
           ))}
         </div>
 
