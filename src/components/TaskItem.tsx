@@ -12,8 +12,13 @@ type Props = {
 export function TaskItem({ task }: Props) {
   const [open, setOpen] = useState(false);
 
+  const platformIconMap: Record<string, string> = {
+    x: "/x-black.png",
+    discord: "/discord.png",
+  };
+
   const platformPrefix = task.type.split("_")[0];
-  const iconSrc = `/${platformPrefix}-black.png`;
+  const iconSrc = platformIconMap[platformPrefix];
 
   return (
     <div className="w-full">
@@ -45,14 +50,17 @@ export function TaskItem({ task }: Props) {
             {/* Action Button */}
             <div className="relative w-fit h-fit">
               <div className="absolute top-0 left-0 w-full h-full rounded-md border-2 border-white z-0" />
-              <button
+              <a
+                href={task.targetUrl}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="relative z-10 bg-white text-black font-bold py-2 px-6 rounded-md border-2 border-white flex 
-                            items-center gap-2 transition-transform duration-200 ease-in-out transform
-                            translate-x-[-4px] translate-y-[-4px] hover:translate-x-0 hover:translate-y-0"
+             items-center gap-2 transition-transform duration-200 ease-in-out transform
+             translate-x-[-4px] translate-y-[-4px] hover:translate-x-0 hover:translate-y-0"
               >
                 <Image src={iconSrc} alt="platform" width={16} height={16} />
                 Go to task
-              </button>
+              </a>
             </div>
 
             {/* Verify Button */}

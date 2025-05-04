@@ -1,5 +1,5 @@
 // Supported task types (expandable in the future)
-export type TaskType = "x_follow" | "x_like" | "x_repost"; // X only for now
+export type TaskType = "x_follow" | "x_like" | "x_repost" | "discord_join";
 
 // Base structure for one task within a quest
 export type QuestTask = {
