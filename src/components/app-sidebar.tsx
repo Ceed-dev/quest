@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Shield, User } from "lucide-react";
+import { Shield, User, Gamepad, Package, RefreshCcw, Bell } from "lucide-react";
 
 import { useUser } from "@/providers/user-provider";
 import { ConnectButton } from "thirdweb/react";
@@ -9,7 +9,6 @@ import { inAppWallet } from "thirdweb/wallets";
 import { client } from "@/lib/client";
 
 import { NavMain } from "@/components/nav-main";
-// import { NavProjects } from "@/components/nav-projects";
 import { NavUser } from "@/components/nav-user";
 import { TeamSwitcher } from "@/components/team-switcher";
 import {
@@ -46,6 +45,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               url: "/",
               icon: Shield,
             },
+            {
+              title: "Games",
+              url: "/games",
+              icon: Gamepad,
+            },
             ...(user
               ? [
                   {
@@ -53,11 +57,25 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                     url: "/profile",
                     icon: User,
                   },
+                  {
+                    title: "Inventory",
+                    url: "/inventory",
+                    icon: Package,
+                  },
+                  {
+                    title: "Gacha",
+                    url: "/gacha",
+                    icon: RefreshCcw,
+                  },
+                  {
+                    title: "Notifications",
+                    url: "/notifications",
+                    icon: Bell,
+                  },
                 ]
               : []),
           ]}
         />
-        {/* <NavProjects projects={data.projects} /> */}
       </SidebarContent>
       <SidebarFooter>
         {loading || !user ? (
