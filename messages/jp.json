@@ -1,0 +1,10 @@
+{
+  "sidebar": {
+    "quests": "クエスト",
+    "games": "ゲーム",
+    "profile": "プロフィール",
+    "inventory": "インベントリ",
+    "gacha": "ガチャ",
+    "notifications": "通知"
+  }
+}
