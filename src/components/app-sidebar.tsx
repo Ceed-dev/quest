@@ -2,6 +2,8 @@
 
 import * as React from "react";
 import { Shield, User, Gamepad, Package, RefreshCcw, Bell } from "lucide-react";
+import { useLocale } from "next-intl";
+import { usePathname, useRouter } from "@/i18n/navigation";
 
 import { useUser } from "@/providers/user-provider";
 import { ConnectButton } from "thirdweb/react";
@@ -23,6 +25,16 @@ import { useMemo } from "react";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { user, loading } = useUser();
+
+  const locale = useLocale();
+  const pathname = usePathname();
+  const router = useRouter();
+
+  const toggleLocale = locale === "en" ? "ja" : "en";
+
+  const handleLocaleToggle = () => {
+    router.push(pathname, { locale: toggleLocale });
+  };
 
   const wallets = useMemo(
     () => [
@@ -53,27 +65,27 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             },
             ...(user
               ? [
-                  {
-                    title: "Profile",
-                    url: "/profile",
-                    icon: User,
-                  },
-                  {
-                    title: "Inventory",
-                    url: "/inventory",
-                    icon: Package,
-                  },
-                  {
-                    title: "Gacha",
-                    url: "/gacha",
-                    icon: RefreshCcw,
-                  },
-                  {
-                    title: "Notifications",
-                    url: "/notifications",
-                    icon: Bell,
-                  },
-                ]
+                {
+                  title: "Profile",
+                  url: "/profile",
+                  icon: User,
+                },
+                {
+                  title: "Inventory",
+                  url: "/inventory",
+                  icon: Package,
+                },
+                {
+                  title: "Gacha",
+                  url: "/gacha",
+                  icon: RefreshCcw,
+                },
+                {
+                  title: "Notifications",
+                  url: "/notifications",
+                  icon: Bell,
+                },
+              ]
               : []),
           ]}
         />
@@ -84,8 +96,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             variant="ghost"
             size="sm"
             className="text-xs text-muted-foreground hover:text-foreground"
+            onClick={handleLocaleToggle}
           >
-            🌐 English
+            🌐 {toggleLocale === "en" ? "English" : "日本語"}
           </Button>
         </div>
 
