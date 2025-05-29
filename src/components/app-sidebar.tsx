@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { Shield, User, Gamepad, Package, RefreshCcw, Bell } from "lucide-react";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { usePathname, useRouter } from "@/i18n/navigation";
 
 import { useUser } from "@/providers/user-provider";
@@ -29,6 +29,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const locale = useLocale();
   const pathname = usePathname();
   const router = useRouter();
+  const t = useTranslations("sidebar");
 
   const toggleLocale = locale === "en" ? "ja" : "en";
 
@@ -54,34 +55,34 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavMain
           items={[
             {
-              title: "Quests",
+              title: t("quests"),
               url: "/",
               icon: Shield,
             },
             {
-              title: "Games",
+              title: t("games"),
               url: "/games",
               icon: Gamepad,
             },
             ...(user
               ? [
                 {
-                  title: "Profile",
+                  title: t("profile"),
                   url: "/profile",
                   icon: User,
                 },
                 {
-                  title: "Inventory",
+                  title: t("inventory"),
                   url: "/inventory",
                   icon: Package,
                 },
                 {
-                  title: "Gacha",
+                  title: t("gacha"),
                   url: "/gacha",
                   icon: RefreshCcw,
                 },
                 {
-                  title: "Notifications",
+                  title: t("notifications"),
                   url: "/notifications",
                   icon: Bell,
                 },
