@@ -6,5 +6,15 @@
     "inventory": "Inventory",
     "gacha": "Gacha",
     "notifications": "Notifications"
+  },
+  "tutorial": {
+    "step1Title": "How to do quests",
+    "step1Desc": "Complete listed quests to earn points and rewards.",
+    "step2Title": "How to earn tokens",
+    "step2Desc": "Earn tokens by completing quests and participating in games.",
+    "step3Title": "Using inventory and gacha",
+    "step3Desc": "Manage your earned items in inventory and spin gacha for bonus rewards.",
+    "finalStepTitle": "You're all set!",
+    "finalStepDesc": "Enjoy completing quests and earning rewards!"
   }
 }

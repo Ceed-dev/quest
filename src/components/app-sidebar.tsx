@@ -21,15 +21,25 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
+
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { user, loading } = useUser();
+  const { user, loading, isNewUser, setIsNewUser } = useUser();
+  console.log("isNewUser:", isNewUser);
 
   const locale = useLocale();
   const pathname = usePathname();
   const router = useRouter();
-  const t = useTranslations("sidebar");
+  const tSidebar = useTranslations("sidebar");
+  const tTutorial = useTranslations("tutorial");
 
   const toggleLocale = locale === "en" ? "ja" : "en";
 
@@ -46,6 +56,29 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     [],
   );
 
+  const [currentStep, setCurrentStep] = useState(0);
+
+  const tutorialSteps = [
+    {
+      title: tTutorial("step1Title"),
+      desc: tTutorial("step1Desc"),
+    },
+    {
+      title: tTutorial("step2Title"),
+      desc: tTutorial("step2Desc"),
+    },
+    {
+      title: tTutorial("step3Title"),
+      desc: tTutorial("step3Desc"),
+    },
+    {
+      title: tTutorial("finalStepTitle"),
+      desc: tTutorial("finalStepDesc"),
+    },
+  ];
+
+  const isFinalStep = currentStep === tutorialSteps.length - 1;
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -55,34 +88,34 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavMain
           items={[
             {
-              title: t("quests"),
+              title: tSidebar("quests"),
               url: "/",
               icon: Shield,
             },
             {
-              title: t("games"),
+              title: tSidebar("games"),
               url: "/games",
               icon: Gamepad,
             },
             ...(user
               ? [
                   {
-                    title: t("profile"),
+                    title: tSidebar("profile"),
                     url: "/profile",
                     icon: User,
                   },
                   {
-                    title: t("inventory"),
+                    title: tSidebar("inventory"),
                     url: "/inventory",
                     icon: Package,
                   },
                   {
-                    title: t("gacha"),
+                    title: tSidebar("gacha"),
                     url: "/gacha",
                     icon: RefreshCcw,
                   },
                   {
-                    title: t("notifications"),
+                    title: tSidebar("notifications"),
                     url: "/notifications",
                     icon: Bell,
                   },
@@ -116,6 +149,41 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         )}
       </SidebarFooter>
       <SidebarRail />
+      <Dialog
+        open={isNewUser}
+        onOpenChange={(open) => {
+          if (!open) {
+            setIsNewUser(false);
+            setCurrentStep(0);
+          }
+        }}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{tutorialSteps[currentStep].title}</DialogTitle>
+            <DialogDescription>
+              {tutorialSteps[currentStep].desc}
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="flex justify-end mt-4">
+            {!isFinalStep ? (
+              <Button onClick={() => setCurrentStep((prev) => prev + 1)}>
+                Next
+              </Button>
+            ) : (
+              <Button
+                onClick={() => {
+                  setIsNewUser(false);
+                  setCurrentStep(0);
+                }}
+              >
+                OK
+              </Button>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
     </Sidebar>
   );
 }
