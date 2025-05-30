@@ -16,12 +16,13 @@ import { handleCreateUser } from "@/lib/handleCreateUser";
 import type { User } from "@/types/user";
 
 type UserContextValue =
-  | { user: null; loading: true }
-  | { user: User; loading: false };
+  | { user: null; loading: true; isNewUser: false }
+  | { user: User; loading: false; isNewUser: boolean };
 
 const UserContext = createContext<UserContextValue>({
   user: null,
   loading: true,
+  isNewUser: false,
 });
 
 export function UserProvider({ children }: { children: ReactNode }) {
@@ -29,11 +30,12 @@ export function UserProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<UserContextValue>({
     user: null,
     loading: true,
+    isNewUser: false,
   });
 
   useEffect(() => {
     if (!account) {
-      setState({ user: null, loading: true });
+      setState({ user: null, loading: true, isNewUser: false });
       return;
     }
 
@@ -41,27 +43,28 @@ export function UserProvider({ children }: { children: ReactNode }) {
 
     (async () => {
       const email = await getUserEmail({ client });
-      await handleCreateUser({
+      const isNew = await handleCreateUser({
         walletAddress: account.address,
         email: email ?? "",
       });
-    })();
 
-    const unsub = onSnapshot(ref, (snap) => {
-      if (!snap.exists()) return;
+      const unsub = onSnapshot(ref, (snap) => {
+        if (!snap.exists()) return;
 
-      const data = snap.data() as User;
+        const data = snap.data() as User;
 
-      setState({
-        user: {
-          ...data,
-          walletAddress: account.address,
-        },
-        loading: false,
+        setState({
+          user: {
+            ...data,
+            walletAddress: account.address,
+          },
+          loading: false,
+          isNewUser: isNew,
+        });
       });
-    });
 
-    return () => unsub();
+      return () => unsub();
+    })();
   }, [account]);
 
   return <UserContext.Provider value={state}>{children}</UserContext.Provider>;

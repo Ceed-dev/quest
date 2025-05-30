@@ -66,27 +66,27 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             },
             ...(user
               ? [
-                {
-                  title: t("profile"),
-                  url: "/profile",
-                  icon: User,
-                },
-                {
-                  title: t("inventory"),
-                  url: "/inventory",
-                  icon: Package,
-                },
-                {
-                  title: t("gacha"),
-                  url: "/gacha",
-                  icon: RefreshCcw,
-                },
-                {
-                  title: t("notifications"),
-                  url: "/notifications",
-                  icon: Bell,
-                },
-              ]
+                  {
+                    title: t("profile"),
+                    url: "/profile",
+                    icon: User,
+                  },
+                  {
+                    title: t("inventory"),
+                    url: "/inventory",
+                    icon: Package,
+                  },
+                  {
+                    title: t("gacha"),
+                    url: "/gacha",
+                    icon: RefreshCcw,
+                  },
+                  {
+                    title: t("notifications"),
+                    url: "/notifications",
+                    icon: Bell,
+                  },
+                ]
               : []),
           ]}
         />
