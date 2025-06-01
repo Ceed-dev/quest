@@ -2,6 +2,7 @@
 export type QuestTask = {
   id: string; // Unique task ID (e.g., "task1")
   label: string; // Display label or instruction (e.g., "Follow @xxx on X")
+  points: number; // Points awarded for completing this task (e.g., 10)
 };
 
 // Main Quest type definition (MVP version)
@@ -18,6 +19,7 @@ export type Quest = {
   title: string; // Quest title
   description: string; // Quest description or details
   catchphrase: string; // Highlighted tagline or slogan
+  backgroundImageUrl: string; // Background image for ItemCard or display
 
   // List of tasks associated with this quest
   tasks: QuestTask[];
