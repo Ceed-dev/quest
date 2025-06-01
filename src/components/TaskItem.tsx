@@ -7,7 +7,7 @@ import { useConnectModal } from "thirdweb/react";
 import { inAppWallet } from "thirdweb/wallets";
 import { useUser } from "@/providers/user-provider";
 import { client } from "@/lib/client";
-import { saveTaskVerification } from "@/lib/verifyTask";
+import { uploadTaskImageAndSaveSubmission } from "@/lib/uploadTaskImageAndSaveSubmission";
 
 type Props = {
   questId: string;
@@ -19,6 +19,7 @@ export function TaskItem({ questId, task }: Props) {
   const { connect } = useConnectModal();
   const [open, setOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   // NOTE: Fixed icon because task.type is no longer available
   const iconSrc = "/check-box.svg";
@@ -50,18 +51,31 @@ export function TaskItem({ questId, task }: Props) {
 
   const handleVerify = async () => {
     if (!user) return;
-    const result = await saveTaskVerification(
-      user.walletAddress!,
-      questId,
-      task.id,
-    );
+    if (!selectedFile) {
+      alert("Please select an image before verifying.");
+      return;
+    }
 
-    if (result.alreadyExists) {
-      alert("You've already verified this task.");
-    } else if (result.success) {
-      alert("Verification saved successfully.");
-    } else {
-      alert("Verification failed. Please try again.");
+    const confirmed = window.confirm(
+      "Are you sure you want to upload this image and submit the task?",
+    );
+    if (!confirmed) {
+      return;
+    }
+
+    try {
+      await uploadTaskImageAndSaveSubmission({
+        userId: user.walletAddress!,
+        questId,
+        taskId: task.id,
+        file: selectedFile,
+        points: task.points,
+      });
+
+      alert("Image uploaded and submission saved successfully.");
+    } catch (err) {
+      console.error(err);
+      alert("Failed to upload and save submission. Please try again.");
     }
   };
 
@@ -127,6 +141,7 @@ export function TaskItem({ questId, task }: Props) {
                     if (file) {
                       const imageUrl = URL.createObjectURL(file);
                       setSelectedImage(imageUrl);
+                      setSelectedFile(file);
                     }
                   }}
                 />
