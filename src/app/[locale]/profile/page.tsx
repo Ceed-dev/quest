@@ -15,8 +15,6 @@ export default function ProfilePage() {
   const [xId, setXId] = useState("");
   const [discordId, setDiscordId] = useState("");
 
-  const points = 1200; // Placeholder. You can replace this with user.points if stored in DB.
-
   useEffect(() => {
     if (!user) {
       toast.error("You must be logged in to view your profile.");
@@ -69,13 +67,10 @@ export default function ProfilePage() {
           transition-transform duration-200 ease-in-out transform
           translate-x-[-4px] translate-y-[-4px] hover:translate-x-0 hover:translate-y-0"
         >
-          <p className="text-sm font-bold mb-2 text-gray-500">
-            Total Points(WIP)
+          <p className="text-sm font-bold mb-2 text-gray-500">Total Points</p>
+          <p className="text-4xl font-extrabold text-black">
+            {user.totalPoints} pts
           </p>
-          <p className="text-sm text-gray-500">
-            This is just a placeholder for now...
-          </p>
-          <p className="text-4xl font-extrabold text-black">{points} pts</p>
         </div>
       </div>
 

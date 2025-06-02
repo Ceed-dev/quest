@@ -7,8 +7,11 @@ type Params = {
   email: string;
 };
 
-export async function handleCreateUser({ walletAddress, email }: Params) {
-  if (!walletAddress || !email) return;
+export async function handleCreateUser({
+  walletAddress,
+  email,
+}: Params): Promise<boolean> {
+  if (!walletAddress || !email) return false;
 
   const userRef = doc(db, "users", walletAddress);
   const userSnap = await getDoc(userRef);
@@ -20,6 +23,7 @@ export async function handleCreateUser({ walletAddress, email }: Params) {
         x: "",
         discord: "",
       },
+      totalPoints: 0,
       timestamps: {
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -27,5 +31,8 @@ export async function handleCreateUser({ walletAddress, email }: Params) {
     };
 
     await setDoc(userRef, newUser);
+    return true;
   }
+
+  return false;
 }

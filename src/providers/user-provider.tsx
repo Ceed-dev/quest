@@ -16,12 +16,24 @@ import { handleCreateUser } from "@/lib/handleCreateUser";
 import type { User } from "@/types/user";
 
 type UserContextValue =
-  | { user: null; loading: true }
-  | { user: User; loading: false };
+  | {
+      user: null;
+      loading: true;
+      isNewUser: boolean;
+      setIsNewUser: (value: boolean) => void;
+    }
+  | {
+      user: User;
+      loading: false;
+      isNewUser: boolean;
+      setIsNewUser: (value: boolean) => void;
+    };
 
 const UserContext = createContext<UserContextValue>({
   user: null,
   loading: true,
+  isNewUser: false,
+  setIsNewUser: () => {},
 });
 
 export function UserProvider({ children }: { children: ReactNode }) {
@@ -29,11 +41,19 @@ export function UserProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<UserContextValue>({
     user: null,
     loading: true,
+    isNewUser: false,
+    setIsNewUser: (value: boolean) =>
+      setState((prev) => ({ ...prev, isNewUser: value })),
   });
 
   useEffect(() => {
     if (!account) {
-      setState({ user: null, loading: true });
+      setState((prev) => ({
+        ...prev,
+        user: null,
+        loading: true,
+        isNewUser: false,
+      }));
       return;
     }
 
@@ -41,27 +61,29 @@ export function UserProvider({ children }: { children: ReactNode }) {
 
     (async () => {
       const email = await getUserEmail({ client });
-      await handleCreateUser({
+      const isNew = await handleCreateUser({
         walletAddress: account.address,
         email: email ?? "",
       });
-    })();
 
-    const unsub = onSnapshot(ref, (snap) => {
-      if (!snap.exists()) return;
+      const unsub = onSnapshot(ref, (snap) => {
+        if (!snap.exists()) return;
 
-      const data = snap.data() as User;
+        const data = snap.data() as User;
 
-      setState({
-        user: {
-          ...data,
-          walletAddress: account.address,
-        },
-        loading: false,
+        setState((prev) => ({
+          ...prev,
+          user: {
+            ...data,
+            walletAddress: account.address,
+          },
+          loading: false,
+          isNewUser: isNew,
+        }));
       });
-    });
 
-    return () => unsub();
+      return () => unsub();
+    })();
   }, [account]);
 
   return <UserContext.Provider value={state}>{children}</UserContext.Provider>;

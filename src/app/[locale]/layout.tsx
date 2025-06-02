@@ -1,6 +1,10 @@
+import { NextIntlClientProvider, hasLocale } from "next-intl";
+import { notFound } from "next/navigation";
+import { routing } from "@/i18n/routing";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import { ReactNode } from "react";
+import "../globals.css";
 
 import { ThirdwebProvider } from "thirdweb/react";
 import { UserProvider } from "@/providers/user-provider";
@@ -19,6 +23,10 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+export function generateStaticParams() {
+  return [{ locale: "en" }, { locale: "ja" }];
+}
+
 export const metadata: Metadata = {
   title: "Quest App",
   description: "Explore and complete quests",
@@ -26,31 +34,41 @@ export const metadata: Metadata = {
 
 // TODO: Apply a global theme (black base + lime accent) using Tailwind's custom theme config.
 // For now, apply colors individually with Tailwind classes on each page.
-export default function RootLayout({
+export default async function RootLayout({
   children,
+  params,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
+  params: Promise<{ locale: string }>;
 }) {
+  // Ensure that the incoming `locale` is valid
+  const { locale } = await params;
+  if (!hasLocale(routing.locales, locale)) {
+    notFound();
+  }
+
   return (
     // TODO: Replace hardcoded tailwind classes with theme tokens once theme setup is stable.
     // https://ui.shadcn.com/docs/dark-mode/next
-    <html lang="en" className="dark">
+    <html lang={locale} className="dark">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ThirdwebProvider>
-          <UserProvider>
-            <QuestsProvider>
-              <SidebarProvider>
-                <AppSidebar />
-                <SidebarInset>
-                  <GlobalHeader />
-                  {children}
-                </SidebarInset>
-              </SidebarProvider>
-            </QuestsProvider>
-          </UserProvider>
-        </ThirdwebProvider>
+        <NextIntlClientProvider>
+          <ThirdwebProvider>
+            <UserProvider>
+              <QuestsProvider>
+                <SidebarProvider>
+                  <AppSidebar />
+                  <SidebarInset>
+                    <GlobalHeader />
+                    {children}
+                  </SidebarInset>
+                </SidebarProvider>
+              </QuestsProvider>
+            </UserProvider>
+          </ThirdwebProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );
