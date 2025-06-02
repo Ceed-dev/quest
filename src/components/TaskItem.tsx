@@ -73,10 +73,10 @@ export function TaskItem({ questId, task }: TaskItemProps) {
     setOpen(!open);
   };
 
-  const handleVerify = async () => {
+  const handleSubmit = async () => {
     if (!user) return;
     if (!selectedFile) {
-      alert("Please select an image before verifying.");
+      alert("Please select an image before submitting.");
       return;
     }
 
@@ -215,16 +215,16 @@ export function TaskItem({ questId, task }: TaskItemProps) {
                   />
                 </div>
 
-                {/* Verify Button */}
+                {/* Submit Button */}
                 <div className="relative w-fit h-fit">
                   <div className="absolute top-0 left-0 w-full h-full rounded-md border-2 border-white z-0" />
                   <button
-                    onClick={handleVerify}
+                    onClick={handleSubmit}
                     className="relative z-10 bg-lime-300 font-bold py-2 px-6 rounded-md text-black border-2 border-white
                 transition-transform duration-200 ease-in-out transform
                 translate-x-[-4px] translate-y-[-4px] hover:translate-x-0 hover:translate-y-0"
                   >
-                    Verify ({task.points} pts)
+                    Submit ({task.points} pts)
                   </button>
                 </div>
               </div>

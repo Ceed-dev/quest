@@ -38,11 +38,11 @@ export function ItemCard({
         <div className="absolute inset-0 bg-black/20"></div>
 
         {/* Main content layer */}
-        <div className="relative z-10 flex flex-col justify-between h-full p-4">
+        <div className="relative z-10 flex flex-col justify-between h-full">
           {/* Top section: icon (only shown for quests) */}
           <div className="flex justify-between items-start">
             {type === "quest" && iconUrl && (
-              <div className="w-10 h-10 bg-black/50 rounded overflow-hidden">
+              <div className="w-10 h-10 bg-black/50 rounded overflow-hidden mx-4 mt-4">
                 <Image
                   src={iconUrl}
                   alt="Icon"
@@ -55,7 +55,7 @@ export function ItemCard({
           </div>
 
           {/* Middle section: title, points (if quest), and description */}
-          <div className="text-white">
+          <div className="text-white bg-black/50 h-[50%] p-4">
             <h3
               className={
                 type === "quest"
@@ -76,9 +76,11 @@ export function ItemCard({
           </div>
 
           {/* Bottom section: action button */}
-          <button className="w-full bg-white text-black font-semibold rounded-full py-2">
-            {type === "quest" ? "Join the Quest" : "View the Game"}
-          </button>
+          <div className="px-4 pb-4">
+            <button className="w-full bg-white text-black font-semibold rounded-full py-2">
+              {type === "quest" ? "Join the Quest" : "View the Game"}
+            </button>
+          </div>
         </div>
       </div>
     </Link>
