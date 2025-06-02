@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Shield, User, Gamepad, Package, RefreshCcw, Bell } from "lucide-react";
+import { Shield, User, Package, RefreshCcw } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { usePathname, useRouter } from "@/i18n/navigation";
 
@@ -92,11 +92,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               url: "/",
               icon: Shield,
             },
-            {
-              title: tSidebar("games"),
-              url: "/games",
-              icon: Gamepad,
-            },
             ...(user
               ? [
                   {
@@ -106,18 +101,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   },
                   {
                     title: tSidebar("inventory"),
-                    url: "/inventory",
+                    url: "/",
                     icon: Package,
                   },
                   {
                     title: tSidebar("gacha"),
-                    url: "/gacha",
+                    url: "/",
                     icon: RefreshCcw,
-                  },
-                  {
-                    title: tSidebar("notifications"),
-                    url: "/notifications",
-                    icon: Bell,
                   },
                 ]
               : []),

@@ -1,11 +1,9 @@
 {
   "sidebar": {
     "quests": "クエスト",
-    "games": "ゲーム",
     "profile": "プロフィール",
-    "inventory": "インベントリ",
-    "gacha": "ガチャ",
-    "notifications": "通知"
+    "inventory": "インベントリ（準備中）",
+    "gacha": "ガチャ（準備中）"
   },
   "tutorial": {
     "step1Title": "クエストの進め方",

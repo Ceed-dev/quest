@@ -1,11 +1,9 @@
 {
   "sidebar": {
     "quests": "Quests",
-    "games": "Games",
     "profile": "Profile",
-    "inventory": "Inventory",
-    "gacha": "Gacha",
-    "notifications": "Notifications"
+    "inventory": "Inventory (Coming Soon)",
+    "gacha": "Gacha (Coming Soon)"
   },
   "tutorial": {
     "step1Title": "How to do quests",
