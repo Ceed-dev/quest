@@ -23,6 +23,7 @@ export async function handleCreateUser({
         x: "",
         discord: "",
       },
+      totalPoints: 0,
       timestamps: {
         createdAt: new Date(),
         updatedAt: new Date(),

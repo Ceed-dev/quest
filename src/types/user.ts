@@ -5,6 +5,7 @@ export type User = {
     x: string;
     discord: string;
   };
+  totalPoints: number;
   timestamps: {
     createdAt: Date;
     updatedAt: Date;
