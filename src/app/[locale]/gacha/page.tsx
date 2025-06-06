@@ -128,8 +128,11 @@ export default function GachaPage() {
       <div className="flex justify-center">
         <button
           onClick={handleGacha}
-          className="bg-lime-300 text-black font-bold py-3 px-10 rounded-full border-2 border-white
-                     hover:bg-lime-400 transition-transform transform hover:-translate-y-1"
+          disabled={!user || user.totalPoints < 50}
+          className={`bg-lime-300 text-black font-bold py-3 px-10 rounded-full border-2 border-white
+            hover:bg-lime-400 transition-transform transform hover:-translate-y-1
+            ${!user || user.totalPoints < 50 ? "opacity-50 cursor-not-allowed hover:translate-y-0" : ""}
+          `}
         >
           Spin Gacha (Cost: 50 pts)
         </button>
