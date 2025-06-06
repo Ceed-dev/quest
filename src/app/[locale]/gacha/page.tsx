@@ -8,8 +8,10 @@ import {
   HoverCardContent,
 } from "@/components/ui/hover-card";
 import { Info } from "lucide-react";
+import { useUser } from "@/providers/user-provider";
 
 export default function GachaPage() {
+  const { user } = useUser();
   const [isRolling, setIsRolling] = useState(false);
 
   const handleGacha = () => {
@@ -42,7 +44,7 @@ export default function GachaPage() {
               </HoverCardContent>
             </HoverCard>
           </div>
-          <p className="text-3xl font-bold">1200</p>
+          <p className="text-3xl font-bold">{user?.totalPoints ?? 0}</p>
         </div>
         <div className="bg-black/40 border-2 border-green-300 p-4 rounded-lg text-center">
           <div className="flex items-center justify-center gap-1 mb-1">
