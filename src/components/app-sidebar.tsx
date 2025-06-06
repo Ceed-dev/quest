@@ -81,14 +81,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                     icon: User,
                   },
                   {
+                    title: tSidebar("gacha"),
+                    url: "/gacha",
+                    icon: RefreshCcw,
+                  },
+                  {
                     title: tSidebar("inventory"),
                     url: "/",
                     icon: Package,
-                  },
-                  {
-                    title: tSidebar("gacha"),
-                    url: "/",
-                    icon: RefreshCcw,
                   },
                 ]
               : []),
