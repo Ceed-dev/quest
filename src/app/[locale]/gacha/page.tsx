@@ -32,7 +32,7 @@ export default function GachaPage() {
   };
 
   const handleGacha = () => {
-    if (!user || user.totalPoints < 50) return;
+    if (!user || user.inventory.points < 50) return;
 
     const selectedRarity = getRandomCubeRarity();
     setRollingRarity(selectedRarity);
@@ -59,7 +59,7 @@ export default function GachaPage() {
               </HoverCardContent>
             </HoverCard>
           </div>
-          <p className="text-3xl font-bold">{user?.totalPoints ?? 0}</p>
+          <p className="text-3xl font-bold">{user?.inventory.points ?? 0}</p>
         </div>
         <div className="bg-black/40 border-2 border-green-300 p-4 rounded-lg text-center">
           <div className="flex items-center justify-center gap-1 mb-1">
@@ -156,7 +156,7 @@ export default function GachaPage() {
       {/* Gachapon Display */}
       <div className="flex justify-center">
         <div
-          className={`translate-x-[-45px] ${user && user.totalPoints >= 50 ? "animate-pulse" : ""}`}
+          className={`translate-x-[-45px] ${user && user.inventory.points >= 50 ? "animate-pulse" : ""}`}
         >
           <Image
             src="/gacha/gachapon.svg"
@@ -172,10 +172,10 @@ export default function GachaPage() {
       <div className="flex justify-center">
         <button
           onClick={handleGacha}
-          disabled={!user || user.totalPoints < 50}
+          disabled={!user || user.inventory.points < 50}
           className={`bg-lime-300 text-black font-bold py-3 px-10 rounded-full border-2 border-white
             hover:bg-lime-400 transition-transform transform hover:-translate-y-1
-            ${!user || user.totalPoints < 50 ? "opacity-50 cursor-not-allowed hover:translate-y-0" : ""}
+            ${!user || user.inventory.points < 50 ? "opacity-50 cursor-not-allowed hover:translate-y-0" : ""}
           `}
         >
           Spin Gacha (Cost: 50 pts)

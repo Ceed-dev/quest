@@ -1,3 +1,5 @@
+import { CubeInventory } from "./cube";
+
 export type User = {
   walletAddress?: string;
   email: string;
@@ -5,7 +7,10 @@ export type User = {
     x: string;
     discord: string;
   };
-  totalPoints: number;
+  inventory: {
+    points: number;
+    cubes: CubeInventory;
+  };
   timestamps: {
     createdAt: Date;
     updatedAt: Date;

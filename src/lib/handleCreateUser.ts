@@ -23,7 +23,15 @@ export async function handleCreateUser({
         x: "",
         discord: "",
       },
-      totalPoints: 0,
+      inventory: {
+        points: 0,
+        cubes: {
+          legendary: 0,
+          superRare: 0,
+          rare: 0,
+          common: 0,
+        },
+      },
       timestamps: {
         createdAt: new Date(),
         updatedAt: new Date(),
