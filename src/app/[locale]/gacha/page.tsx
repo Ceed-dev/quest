@@ -9,18 +9,33 @@ import {
 } from "@/components/ui/hover-card";
 import { Info } from "lucide-react";
 import { useUser } from "@/providers/user-provider";
+import { CubeRarity } from "@/types/cube";
+import { getRandomCubeRarity } from "@/lib/gacha";
 
 export default function GachaPage() {
   const { user } = useUser();
-  const [isRolling, setIsRolling] = useState(false);
+  const [rollingRarity, setRollingRarity] = useState<CubeRarity | null>(null);
+
+  const getVideoPath = (rarity: CubeRarity) => {
+    switch (rarity) {
+      case "legendary":
+        return "/gacha/animations/legendary.mp4";
+      case "superRare":
+        return "/gacha/animations/superRare.mp4";
+      case "rare":
+        return "/gacha/animations/rare.mp4";
+      case "common":
+        return "/gacha/animations/common.mp4";
+      default:
+        return "";
+    }
+  };
 
   const handleGacha = () => {
-    setIsRolling(true);
-    // Simulate animation duration
-    setTimeout(() => {
-      setIsRolling(false);
-      // In future: update cube inventory here
-    }, 4000); // e.g., 4s animation
+    if (!user || user.totalPoints < 50) return;
+
+    const selectedRarity = getRandomCubeRarity();
+    setRollingRarity(selectedRarity);
   };
 
   return (
@@ -113,15 +128,19 @@ export default function GachaPage() {
         </div>
       </div>
 
-      {/* Cube Display */}
-      <div className="flex justify-center mb-10">
-        <Image
-          src="/dummy-cube.png"
-          alt="Cube"
-          width={350}
-          height={350}
-          className="rounded-lg shadow-lg"
-        />
+      {/* Gachapon Display */}
+      <div className="flex justify-center">
+        <div
+          className={`translate-x-[-45px] ${user && user.totalPoints >= 50 ? "animate-pulse" : ""}`}
+        >
+          <Image
+            src="/gacha/gachapon.svg"
+            alt="gachapon"
+            width={350}
+            height={350}
+            className="rounded-lg shadow-lg"
+          />
+        </div>
       </div>
 
       {/* Gacha Button */}
@@ -139,12 +158,12 @@ export default function GachaPage() {
       </div>
 
       {/* Overlay with animation */}
-      {isRolling && (
+      {rollingRarity && (
         <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
           <video
-            src="/dummy-gacha-animation.mp4"
+            src={getVideoPath(rollingRarity)}
             autoPlay
-            onEnded={() => setIsRolling(false)}
+            onEnded={() => setRollingRarity(null)}
             className="w-[500px] md:w-[700px] rounded-xl shadow-2xl"
           />
         </div>
