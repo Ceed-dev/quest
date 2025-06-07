@@ -82,46 +82,71 @@ export default function GachaPage() {
                 </p>
                 <ul className="list-disc list-inside space-y-1">
                   <li>
-                    <span className="text-cyan-500 font-semibold">
+                    <span className="text-yellow-500 font-semibold">
                       Legendary
                     </span>
                     : 0.5%
                   </li>
                   <li>
-                    <span className="text-green-500 font-semibold">
+                    <span className="text-purple-500 font-semibold">
                       Super Rare
                     </span>
                     : 4.5%
                   </li>
                   <li>
-                    <span className="text-purple-500 font-semibold">Rare</span>:
+                    <span className="text-green-500 font-semibold">Rare</span>:
                     20%
                   </li>
                   <li>
-                    <span className="text-yellow-500 font-semibold">
-                      Common
-                    </span>
-                    : 75%
+                    <span className="text-gray-500 font-semibold">Common</span>:
+                    75%
                   </li>
                 </ul>
               </HoverCardContent>
             </HoverCard>
           </div>
           <div className="grid grid-cols-2 gap-y-2 gap-x-6 font-semibold">
-            <div className="flex justify-between w-full max-w-[160px] text-cyan-400">
-              <span>Legendary</span>
+            <div className="flex justify-between items-center w-full max-w-[160px] text-yellow-400">
+              <div className="flex items-center gap-2">
+                <Image
+                  src="/cube/legendary.svg"
+                  alt="Legendary"
+                  width={16}
+                  height={16}
+                />
+                <span>Legendary</span>
+              </div>
               <span className="text-white">0</span>
             </div>
-            <div className="flex justify-between w-full max-w-[160px] text-green-400">
-              <span>Super Rare</span>
+            <div className="flex justify-between items-center w-full max-w-[160px] text-purple-400">
+              <div className="flex items-center gap-2">
+                <Image
+                  src="/cube/superRare.svg"
+                  alt="Super Rare"
+                  width={16}
+                  height={16}
+                />
+                <span>Super Rare</span>
+              </div>
               <span className="text-white">0</span>
             </div>
-            <div className="flex justify-between w-full max-w-[160px] text-purple-400">
-              <span>Rare</span>
+            <div className="flex justify-between items-center w-full max-w-[160px] text-green-400">
+              <div className="flex items-center gap-2">
+                <Image src="/cube/rare.svg" alt="Rare" width={16} height={16} />
+                <span>Rare</span>
+              </div>
               <span className="text-white">0</span>
             </div>
-            <div className="flex justify-between w-full max-w-[160px] text-yellow-400">
-              <span>Common</span>
+            <div className="flex justify-between items-center w-full max-w-[160px] text-gray-400">
+              <div className="flex items-center gap-2">
+                <Image
+                  src="/cube/common.svg"
+                  alt="Common"
+                  width={16}
+                  height={16}
+                />
+                <span>Common</span>
+              </div>
               <span className="text-white">0</span>
             </div>
           </div>
