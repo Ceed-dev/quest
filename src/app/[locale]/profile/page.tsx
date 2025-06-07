@@ -69,7 +69,7 @@ export default function ProfilePage() {
         >
           <p className="text-sm font-bold mb-2 text-gray-500">Total Points</p>
           <p className="text-4xl font-extrabold text-black">
-            {user.totalPoints} pts
+            {user.inventory.points} pts
           </p>
         </div>
       </div>
