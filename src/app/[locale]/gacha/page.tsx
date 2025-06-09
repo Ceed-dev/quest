@@ -10,11 +10,14 @@ import {
 import { Info } from "lucide-react";
 import { useUser } from "@/providers/user-provider";
 import { CubeRarity } from "@/types/cube";
-import { getRandomCubeRarity } from "@/lib/gacha";
+import { performGachaSpin } from "@/lib/gacha";
 
 export default function GachaPage() {
   const { user } = useUser();
   const [rollingRarity, setRollingRarity] = useState<CubeRarity | null>(null);
+  const [highlightedRarity, setHighlightedRarity] = useState<CubeRarity | null>(
+    null,
+  );
 
   const getVideoPath = (rarity: CubeRarity) => {
     switch (rarity) {
@@ -31,11 +34,21 @@ export default function GachaPage() {
     }
   };
 
-  const handleGacha = () => {
-    if (!user || user.inventory.points < 50) return;
+  const handleGacha = async () => {
+    if (!user || !user.walletAddress || user.inventory.points < 50) return;
 
-    const selectedRarity = getRandomCubeRarity();
-    setRollingRarity(selectedRarity);
+    try {
+      const result = await performGachaSpin(user.walletAddress);
+
+      if (result) {
+        setRollingRarity(result);
+      } else {
+        alert("Gacha failed. You may not have enough points.");
+      }
+    } catch (err) {
+      console.error("Error during gacha spin:", err);
+      alert("An error occurred during gacha.");
+    }
   };
 
   return (
@@ -106,7 +119,11 @@ export default function GachaPage() {
             </HoverCard>
           </div>
           <div className="grid grid-cols-2 gap-y-2 gap-x-6 font-semibold">
-            <div className="flex justify-between items-center w-full max-w-[160px] text-yellow-400">
+            <div
+              className={`flex justify-between items-center w-full max-w-[160px] text-yellow-400 
+                          transition-transform duration-300 ease-in-out
+                          ${highlightedRarity === "legendary" ? "scale-110 shadow-lg" : ""}`}
+            >
               <div className="flex items-center gap-2">
                 <Image
                   src="/cube/legendary.svg"
@@ -116,9 +133,15 @@ export default function GachaPage() {
                 />
                 <span>Legendary</span>
               </div>
-              <span className="text-white">0</span>
+              <span className="text-white">
+                {user?.inventory.cubes.legendary}
+              </span>
             </div>
-            <div className="flex justify-between items-center w-full max-w-[160px] text-purple-400">
+            <div
+              className={`flex justify-between items-center w-full max-w-[160px] text-purple-400 
+                          transition-transform duration-300 ease-in-out
+                          ${highlightedRarity === "superRare" ? "scale-110 shadow-lg" : ""}`}
+            >
               <div className="flex items-center gap-2">
                 <Image
                   src="/cube/superRare.svg"
@@ -128,16 +151,26 @@ export default function GachaPage() {
                 />
                 <span>Super Rare</span>
               </div>
-              <span className="text-white">0</span>
+              <span className="text-white">
+                {user?.inventory.cubes.superRare}
+              </span>
             </div>
-            <div className="flex justify-between items-center w-full max-w-[160px] text-green-400">
+            <div
+              className={`flex justify-between items-center w-full max-w-[160px] text-green-400 
+                          transition-transform duration-300 ease-out
+                          ${highlightedRarity === "rare" ? "scale-110 shadow-lg" : ""}`}
+            >
               <div className="flex items-center gap-2">
                 <Image src="/cube/rare.svg" alt="Rare" width={16} height={16} />
                 <span>Rare</span>
               </div>
-              <span className="text-white">0</span>
+              <span className="text-white">{user?.inventory.cubes.rare}</span>
             </div>
-            <div className="flex justify-between items-center w-full max-w-[160px] text-gray-400">
+            <div
+              className={`flex justify-between items-center w-full max-w-[160px] text-gray-400 
+                          transition-transform duration-300 ease-in-out
+                          ${highlightedRarity === "common" ? "scale-110 shadow-lg" : ""}`}
+            >
               <div className="flex items-center gap-2">
                 <Image
                   src="/cube/common.svg"
@@ -147,7 +180,7 @@ export default function GachaPage() {
                 />
                 <span>Common</span>
               </div>
-              <span className="text-white">0</span>
+              <span className="text-white">{user?.inventory.cubes.common}</span>
             </div>
           </div>
         </div>
@@ -188,7 +221,13 @@ export default function GachaPage() {
           <video
             src={getVideoPath(rollingRarity)}
             autoPlay
-            onEnded={() => setRollingRarity(null)}
+            onEnded={() => {
+              const rarity = rollingRarity;
+              setRollingRarity(null);
+              setHighlightedRarity(rarity);
+
+              setTimeout(() => setHighlightedRarity(null), 2000);
+            }}
             className="w-[500px] md:w-[700px] rounded-xl shadow-2xl"
           />
         </div>

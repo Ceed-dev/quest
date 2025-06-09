@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Image from "next/image";
-import { Shield, User, Package } from "lucide-react";
+import { Shield, User, Package, RefreshCcw } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { usePathname, useRouter } from "@/i18n/navigation";
 
@@ -75,22 +75,22 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             },
             ...(user
               ? [
-                {
-                  title: tSidebar("profile"),
-                  url: "/profile",
-                  icon: User,
-                },
-                // {
-                //   title: tSidebar("gacha"),
-                //   url: "/gacha",
-                //   icon: RefreshCcw,
-                // },
-                {
-                  title: tSidebar("inventory"),
-                  url: "/",
-                  icon: Package,
-                },
-              ]
+                  {
+                    title: tSidebar("profile"),
+                    url: "/profile",
+                    icon: User,
+                  },
+                  {
+                    title: tSidebar("gacha"),
+                    url: "/gacha",
+                    icon: RefreshCcw,
+                  },
+                  {
+                    title: tSidebar("inventory"),
+                    url: "/",
+                    icon: Package,
+                  },
+                ]
               : []),
           ]}
         />
