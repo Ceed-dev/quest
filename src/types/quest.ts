@@ -3,6 +3,12 @@ export type QuestTask = {
   id: string; // Unique task ID (e.g., "task1")
   label: string; // Display label or instruction (e.g., "Follow @xxx on X")
   points: number; // Points awarded for completing this task (e.g., 10)
+
+  // Optional button config for tasks that involve external actions (e.g., X follow, Discord join)
+  actionButton?: {
+    label: string; // e.g., "Follow on X", "Join Discord"
+    url: string; // e.g., "https://twitter.com/xxx", "https://discord.gg/xxx"
+  };
 };
 
 // Main Quest type definition (MVP version)
