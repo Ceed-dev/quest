@@ -32,6 +32,7 @@ interface QuestStats {
 }
 
 export default function AdminDashboard() {
+  const [isAuthorized, setIsAuthorized] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [overviewStats, setOverviewStats] = useState<OverviewStats | null>(
     null,
@@ -52,10 +53,28 @@ export default function AdminDashboard() {
     }
   };
 
-  // Initial fetch on page load
   useEffect(() => {
+    const password = prompt("Enter admin password");
+    if (password !== process.env.NEXT_PUBLIC_ADMIN_PASSWORD) {
+      alert("Incorrect password");
+      window.location.href = "/";
+      return;
+    }
+
+    setIsAuthorized(true);
+    // Initial fetch on page load
     handleRefreshData();
   }, []);
+
+  if (!isAuthorized) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p className="text-muted-foreground text-lg">
+          Authorizing admin access...
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto p-6 space-y-8">
@@ -171,14 +190,18 @@ export default function AdminDashboard() {
                   <TableHead className="text-center">
                     Unique Submitters
                   </TableHead>
-                  <TableHead className="text-center">Last Submitted At</TableHead>
+                  <TableHead className="text-center">
+                    Last Submitted At
+                  </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {questStats.map((quest) => (
                   <TableRow key={quest.id}>
                     <TableCell className="font-medium">{quest.name}</TableCell>
-                    <TableCell className="font-medium">{quest.projectName}</TableCell>
+                    <TableCell className="font-medium">
+                      {quest.projectName}
+                    </TableCell>
                     <TableCell className="text-center">
                       {quest.taskCount}
                     </TableCell>
