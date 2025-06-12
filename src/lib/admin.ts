@@ -13,6 +13,7 @@ export type OverviewStats = {
 export type QuestStats = {
   id: string;
   name: string;
+  projectName: string;
   taskCount: number;
   submissionCount: number;
   uniqueSubmitters: number;
@@ -78,6 +79,7 @@ export const fetchAdminStats = async (): Promise<AdminStats> => {
     return {
       id: quest.id,
       name: quest.title,
+      projectName: quest.project.name,
       taskCount: quest.tasks.length,
       submissionCount: relatedSubmissions.length,
       uniqueSubmitters: uniqueUserIds.size,

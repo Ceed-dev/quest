@@ -24,6 +24,7 @@ interface OverviewStats {
 interface QuestStats {
   id: string;
   name: string;
+  projectName: string;
   taskCount: number;
   submissionCount: number;
   uniqueSubmitters: number;
@@ -162,6 +163,7 @@ export default function AdminDashboard() {
               <TableHeader>
                 <TableRow>
                   <TableHead>Quest Name</TableHead>
+                  <TableHead>Project Name</TableHead>
                   <TableHead className="text-center">Task Count</TableHead>
                   <TableHead className="text-center">
                     Submission Count
@@ -176,6 +178,7 @@ export default function AdminDashboard() {
                 {questStats.map((quest) => (
                   <TableRow key={quest.id}>
                     <TableCell className="font-medium">{quest.name}</TableCell>
+                    <TableCell className="font-medium">{quest.projectName}</TableCell>
                     <TableCell className="text-center">
                       {quest.taskCount}
                     </TableCell>
