@@ -171,7 +171,7 @@ export default function AdminDashboard() {
                   <TableHead className="text-center">
                     Unique Submitters
                   </TableHead>
-                  <TableHead className="text-center">Last Submitted</TableHead>
+                  <TableHead className="text-center">Last Submitted At</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>

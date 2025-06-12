@@ -71,9 +71,13 @@ export const fetchAdminStats = async (): Promise<AdminStats> => {
               s.timestamps.submittedAt.getTime(),
             ),
           ),
-        )
-          .toISOString()
-          .split("T")[0]
+        ).toLocaleString("ja-JP", {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit",
+        })
       : "N/A";
 
     return {
