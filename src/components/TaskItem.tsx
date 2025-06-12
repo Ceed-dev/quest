@@ -120,11 +120,10 @@ export function TaskItem({ questId, task }: TaskItemProps) {
         <div
           className={`relative z-10 flex items-center justify-between gap-3
                       px-4 py-3 font-bold bg-white text-black
-                      ${
-                        open
-                          ? "rounded-t-md translate-x-0 translate-y-0"
-                          : "rounded-md transition-transform duration-200 ease-in-out transform translate-x-[-4px] translate-y-[-4px] hover:translate-x-0 hover:translate-y-0"
-                      }`}
+                      ${open
+              ? "rounded-t-md translate-x-0 translate-y-0"
+              : "rounded-md transition-transform duration-200 ease-in-out transform translate-x-[-4px] translate-y-[-4px] hover:translate-x-0 hover:translate-y-0"
+            }`}
         >
           <div className="flex flex-col md:flex-row items-center md:gap-3">
             <div className="flex items-center gap-3 mr-auto">
@@ -140,13 +139,12 @@ export function TaskItem({ questId, task }: TaskItemProps) {
               />
               {submission ? (
                 <span
-                  className={`px-2 py-1 rounded-full text-xs font-bold ${
-                    submission.status === "approved"
+                  className={`px-2 py-1 rounded-full text-xs font-bold ${submission.status === "approved"
                       ? "bg-green-300 text-green-900"
                       : submission.status === "pending"
                         ? "bg-yellow-300 text-yellow-900"
                         : "bg-red-300 text-red-900"
-                  }`}
+                    }`}
                 >
                   {submission.status.toUpperCase()} : {task.points} pts
                 </span>
@@ -183,6 +181,22 @@ export function TaskItem({ questId, task }: TaskItemProps) {
             ) : null}
             {submission === null && (
               <div className="flex gap-4">
+                {/* Action Button (e.g., Follow on X) */}
+                {task.actionButton && (
+                  <div className="relative w-fit h-fit flex flex-col items-center">
+                    <div className="absolute top-0 left-0 w-full h-full rounded-md border-2 border-white z-0" />
+                    <a
+                      href={task.actionButton.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="relative z-10 bg-indigo-300 font-bold py-2 px-6 rounded-md text-black border-2 border-white
+        transition-transform duration-200 ease-in-out transform
+        translate-x-[-4px] translate-y-[-4px] hover:translate-x-0 hover:translate-y-0 cursor-pointer"
+                    >
+                      {task.actionButton.label}
+                    </a>
+                  </div>
+                )}
                 {/* Upload Button */}
                 <div className="relative w-fit h-fit flex flex-col items-center">
                   <div className="absolute top-0 left-0 w-full h-full rounded-md border-2 border-white z-0" />

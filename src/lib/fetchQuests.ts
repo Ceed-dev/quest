@@ -23,6 +23,10 @@ type FirestoreQuest = Omit<Quest, "id" | "timestamps" | "tasks"> & {
     id: string;
     label: string;
     points: number;
+    actionButton?: {
+      label: string;
+      url: string;
+    };
   }[];
 };
 
@@ -56,6 +60,7 @@ export const fetchQuests = async (): Promise<Quest[]> => {
         id: task.id,
         label: task.label,
         points: task.points,
+        actionButton: task.actionButton ?? undefined,
       })) as QuestTask[],
       timestamps: {
         createdAt: data.timestamps.createdAt.toDate(),
