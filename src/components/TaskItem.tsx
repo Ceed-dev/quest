@@ -152,7 +152,7 @@ export function TaskItem({ questId, task }: TaskItemProps) {
                 transition-transform duration-200 ease-in-out transform
                 translate-x-[-4px] translate-y-[-4px] hover:translate-x-0 hover:translate-y-0"
       >
-        Submit ({task.points} pts)
+        Submit
       </button>
     </div>
   );
@@ -195,7 +195,7 @@ export function TaskItem({ questId, task }: TaskItemProps) {
                         : "bg-red-300 text-red-900"
                   }`}
                 >
-                  {submission.status.toUpperCase()} : {task.points} pts
+                  {submission.status.toUpperCase()}
                 </span>
               ) : (
                 <span className="px-2 py-1 rounded-full text-xs font-bold bg-gray-300 text-gray-700">
@@ -205,6 +205,9 @@ export function TaskItem({ questId, task }: TaskItemProps) {
             </div>
             <span>{task.label}</span>
           </div>
+          <span className="text-sm font-bold text-gray-700 whitespace-nowrap">
+            {task.points} pts
+          </span>
         </div>
       </div>
 
