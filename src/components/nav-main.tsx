@@ -5,7 +5,7 @@ import type { LucideIcon } from "lucide-react";
 
 import {
   SidebarGroup,
-  SidebarGroupLabel,
+  // SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
@@ -22,7 +22,7 @@ export function NavMain({
 }) {
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Platform</SidebarGroupLabel>
+      {/* <SidebarGroupLabel>Platform</SidebarGroupLabel> */}
       <SidebarMenu>
         {items.map((item) => (
           <SidebarMenuItem key={item.title}>
