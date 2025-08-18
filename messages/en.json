@@ -58,5 +58,11 @@
     "saveFailedToast": "Failed to save your IDs. Please try again.",
     "comingSoon": "🕒 Participation History & Progress Dashboard — Coming Soon!",
     "userIconAlt": "User icon"
+  },
+  "inventory": {
+    "loading": "Loading inventory...",
+    "title": "My Inventory",
+    "totalPoints": "Total Points",
+    "totalCubes": "Total Cubes"
   }
 }
