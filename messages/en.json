@@ -64,5 +64,15 @@
     "title": "My Inventory",
     "totalPoints": "Total Points",
     "totalCubes": "Total Cubes"
+  },
+  "inventoryCard": {
+    "rarity": {
+      "legendary": "Legendary",
+      "superRare": "Super Rare",
+      "rare": "Rare",
+      "common": "Common"
+    },
+    "quantity": "Quantity",
+    "cubeAlt": "{rarity} Qube"
   }
 }

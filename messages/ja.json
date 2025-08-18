@@ -64,5 +64,15 @@
     "title": "インベントリ",
     "totalPoints": "合計ポイント",
     "totalCubes": "合計キューブ"
+  },
+  "inventoryCard": {
+    "rarity": {
+      "legendary": "レジェンド",
+      "superRare": "スーパーレア",
+      "rare": "レア",
+      "common": "ノーマル"
+    },
+    "quantity": "所持数",
+    "cubeAlt": "{rarity} キューブ"
   }
 }

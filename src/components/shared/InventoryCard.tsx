@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 type InventoryCardProps = {
   rarity: "legendary" | "superRare" | "rare" | "common";
@@ -15,14 +16,10 @@ const rarityStyles: Record<string, string> = {
   common: "bg-gray-100 border-gray-400 text-gray-900",
 };
 
-const rarityLabel: Record<string, string> = {
-  legendary: "Legendary",
-  superRare: "Super Rare",
-  rare: "Rare",
-  common: "Common",
-};
-
 export function InventoryCard({ rarity, quantity }: InventoryCardProps) {
+  const t = useTranslations("inventoryCard");
+  const label = t(`rarity.${rarity}`);
+
   return (
     <div
       className={cn(
@@ -33,13 +30,15 @@ export function InventoryCard({ rarity, quantity }: InventoryCardProps) {
     >
       <Image
         src={`/cube/${rarity}.svg`}
-        alt={`${rarity} Qube`}
+        alt={t("cubeAlt", { rarity: label })}
         width={200}
         height={200}
         className="mb-2"
       />
-      <h3 className="text-lg font-bold">{rarityLabel[rarity]}</h3>
-      <p className="text-sm font-medium">Quantity: {quantity}</p>
+      <h3 className="text-lg font-bold">{label}</h3>
+      <p className="text-sm font-medium">
+        {t("quantity")}: {quantity}
+      </p>
     </div>
   );
 }
