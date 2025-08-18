@@ -21,6 +21,12 @@
     "error": "Error loading quests",
     "empty": "No quests available."
   },
+  "itemCard": {
+    "earn": "Earn {count, plural, one {# point} other {# points}}",
+    "joinQuest": "Join the Quest",
+    "viewGame": "View the Game",
+    "iconAlt": "Icon"
+  },
   "questDetail": {
     "loading": "Loading quest details...",
     "totalPoints": "Total Points",

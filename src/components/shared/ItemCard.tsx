@@ -3,6 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 
 // Props type definition for the ItemCard component
 type ItemCardProps = {
@@ -24,6 +25,8 @@ export function ItemCard({
   description,
   points,
 }: ItemCardProps) {
+  const t = useTranslations("itemCard");
+
   return (
     <Link href={`/${type}/${id}`}>
       <div
@@ -45,7 +48,7 @@ export function ItemCard({
               <div className="w-10 h-10 bg-black/50 rounded overflow-hidden mx-4 mt-4">
                 <Image
                   src={iconUrl}
-                  alt="Icon"
+                  alt={t("iconAlt")}
                   width={40}
                   height={40}
                   className="object-cover"
@@ -67,7 +70,7 @@ export function ItemCard({
             </h3>
             {type === "quest" && typeof points === "number" && (
               <p className="text-3xl font-bold">
-                Earn {points} {points === 1 ? "point" : "points"}
+                {t("earn", { count: points })}
               </p>
             )}
             <p className={type === "quest" ? "text-2xl font-bold" : ""}>
@@ -78,7 +81,7 @@ export function ItemCard({
           {/* Bottom section: action button */}
           <div className="px-4 pb-4">
             <button className="w-full bg-white text-black font-semibold rounded-full py-2">
-              {type === "quest" ? "Join the Quest" : "View the Game"}
+              {type === "quest" ? t("joinQuest") : t("viewGame")}
             </button>
           </div>
         </div>

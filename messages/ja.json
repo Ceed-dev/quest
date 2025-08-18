@@ -21,6 +21,12 @@
     "error": "クエストの読み込みでエラーが発生しました",
     "empty": "利用可能なクエストがありません。"
   },
+  "itemCard": {
+    "earn": "{count} ポイント獲得",
+    "joinQuest": "クエストに参加",
+    "viewGame": "ゲームを見る",
+    "iconAlt": "アイコン"
+  },
   "questDetail": {
     "loading": "クエスト詳細を読み込み中…",
     "totalPoints": "合計ポイント",
