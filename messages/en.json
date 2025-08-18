@@ -74,5 +74,20 @@
     },
     "quantity": "Quantity",
     "cubeAlt": "{rarity} Qube"
+  },
+  "gacha": {
+    "title": "Gacha",
+    "yourPoints": "Your Points",
+    "yourPointsHelp": "Earned by completing tasks in quests.",
+    "cubesOwned": "Cubes Owned",
+    "cubesOwnedHelp1": "Collected by spinning the Gacha. Each Cube may contain rewards!",
+    "comingSoon": "Coming Soon!",
+    "rarityTitle": "Gacha Rarity",
+    "button": "Spin Gacha (Cost: {cost} pts)",
+    "alerts": {
+      "failed": "Gacha failed. You may not have enough points.",
+      "error": "An error occurred during gacha."
+    },
+    "gachaponAlt": "Gachapon machine"
   }
 }

@@ -11,6 +11,7 @@ import { Info } from "lucide-react";
 import { useUser } from "@/providers/user-provider";
 import { CubeRarity } from "@/types/cube";
 import { performGachaSpin } from "@/lib/gacha";
+import { useTranslations } from "next-intl";
 
 export default function GachaPage() {
   const { user } = useUser();
@@ -18,6 +19,9 @@ export default function GachaPage() {
   const [highlightedRarity, setHighlightedRarity] = useState<CubeRarity | null>(
     null,
   );
+
+  const t = useTranslations("gacha");
+  const tInv = useTranslations("inventoryCard");
 
   const getVideoPath = (rarity: CubeRarity) => {
     switch (rarity) {
@@ -43,11 +47,11 @@ export default function GachaPage() {
       if (result) {
         setRollingRarity(result);
       } else {
-        alert("Gacha failed. You may not have enough points.");
+        alert(t("alerts.failed"));
       }
     } catch (err) {
       console.error("Error during gacha spin:", err);
-      alert("An error occurred during gacha.");
+      alert(t("alerts.error"));
     }
   };
 
@@ -55,20 +59,20 @@ export default function GachaPage() {
     <div className="relative w-full min-h-screen px-4 py-8 text-white">
       {/* Page Header */}
       <h1 className="text-5xl font-extrabold text-center text-white mb-8 tracking-wide">
-        Gacha
+        {t("title")}
       </h1>
 
       {/* Stats Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl mx-auto mb-10">
         <div className="bg-black/40 border-2 border-orange-300 p-4 rounded-lg text-center">
           <div className="flex items-center justify-center gap-1 mb-1">
-            <p className="text-sm text-gray-300">Your Points</p>
+            <p className="text-sm text-gray-300">{t("yourPoints")}</p>
             <HoverCard>
               <HoverCardTrigger asChild>
                 <Info className="w-4 h-4 text-orange-300 hover:text-white cursor-pointer" />
               </HoverCardTrigger>
               <HoverCardContent className="w-64 text-sm text-gray-200 bg-black/90 border border-orange-400">
-                Earned by completing tasks in quests.
+                {t("yourPointsHelp")}
               </HoverCardContent>
             </HoverCard>
           </div>
@@ -76,43 +80,44 @@ export default function GachaPage() {
         </div>
         <div className="bg-black/40 border-2 border-green-300 p-4 rounded-lg text-center">
           <div className="flex items-center justify-center gap-1 mb-1">
-            <p className="text-sm text-gray-300">Cubes Owned</p>
+            <p className="text-sm text-gray-300">{t("cubesOwned")}</p>
             <HoverCard>
               <HoverCardTrigger asChild>
                 <Info className="w-4 h-4 text-green-300 hover:text-white cursor-pointer" />
               </HoverCardTrigger>
               <HoverCardContent className="w-64 text-sm text-gray-200 bg-black/90 border border-green-400">
-                <span>
-                  Collected by spinning the Gacha. Each Cube may contain
-                  rewards!{" "}
-                </span>
+                <span>{t("cubesOwnedHelp1")}</span>
                 <span className="font-bold underline block mb-2">
-                  Coming Soon!
+                  {t("comingSoon")}
                 </span>
 
                 <p className="font-semibold text-green-300 mb-1">
-                  Gacha Rarity
+                  {t("rarityTitle")}
                 </p>
                 <ul className="list-disc list-inside space-y-1">
                   <li>
                     <span className="text-yellow-500 font-semibold">
-                      Legendary
+                      {tInv("rarity.legendary")}
                     </span>
                     : 0.5%
                   </li>
                   <li>
                     <span className="text-purple-500 font-semibold">
-                      Super Rare
+                      {tInv("rarity.superRare")}
                     </span>
                     : 4.5%
                   </li>
                   <li>
-                    <span className="text-green-500 font-semibold">Rare</span>:
-                    20%
+                    <span className="text-green-500 font-semibold">
+                      {tInv("rarity.rare")}
+                    </span>
+                    : 20%
                   </li>
                   <li>
-                    <span className="text-gray-500 font-semibold">Common</span>:
-                    75%
+                    <span className="text-gray-500 font-semibold">
+                      {tInv("rarity.common")}
+                    </span>
+                    : 75%
                   </li>
                 </ul>
               </HoverCardContent>
@@ -127,11 +132,11 @@ export default function GachaPage() {
               <div className="flex items-center gap-2">
                 <Image
                   src="/cube/legendary.svg"
-                  alt="Legendary"
+                  alt={tInv("rarity.legendary")}
                   width={16}
                   height={16}
                 />
-                <span>Legendary</span>
+                <span>{tInv("rarity.legendary")}</span>
               </div>
               <span className="text-white">
                 {user?.inventory.cubes.legendary}
@@ -145,11 +150,11 @@ export default function GachaPage() {
               <div className="flex items-center gap-2">
                 <Image
                   src="/cube/superRare.svg"
-                  alt="Super Rare"
+                  alt={tInv("rarity.superRare")}
                   width={16}
                   height={16}
                 />
-                <span>Super Rare</span>
+                <span>{tInv("rarity.superRare")}</span>
               </div>
               <span className="text-white">
                 {user?.inventory.cubes.superRare}
@@ -161,8 +166,13 @@ export default function GachaPage() {
                           ${highlightedRarity === "rare" ? "scale-110 shadow-lg" : ""}`}
             >
               <div className="flex items-center gap-2">
-                <Image src="/cube/rare.svg" alt="Rare" width={16} height={16} />
-                <span>Rare</span>
+                <Image
+                  src="/cube/rare.svg"
+                  alt={tInv("rarity.rare")}
+                  width={16}
+                  height={16}
+                />
+                <span>{tInv("rarity.rare")}</span>
               </div>
               <span className="text-white">{user?.inventory.cubes.rare}</span>
             </div>
@@ -174,11 +184,11 @@ export default function GachaPage() {
               <div className="flex items-center gap-2">
                 <Image
                   src="/cube/common.svg"
-                  alt="Common"
+                  alt={tInv("rarity.common")}
                   width={16}
                   height={16}
                 />
-                <span>Common</span>
+                <span>{tInv("rarity.common")}</span>
               </div>
               <span className="text-white">{user?.inventory.cubes.common}</span>
             </div>
@@ -193,7 +203,7 @@ export default function GachaPage() {
         >
           <Image
             src="/gacha/gachapon.svg"
-            alt="gachapon"
+            alt={t("gachaponAlt")}
             width={350}
             height={350}
             className="rounded-lg shadow-lg"
@@ -211,7 +221,7 @@ export default function GachaPage() {
             ${!user || user.inventory.points < 50 ? "opacity-50 cursor-not-allowed hover:translate-y-0" : ""}
           `}
         >
-          Spin Gacha (Cost: 50 pts)
+          {t("button", { cost: 50 })}
         </button>
       </div>
 

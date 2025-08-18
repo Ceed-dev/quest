@@ -74,5 +74,20 @@
     },
     "quantity": "所持数",
     "cubeAlt": "{rarity} キューブ"
+  },
+  "gacha": {
+    "title": "ガチャ",
+    "yourPoints": "所持ポイント",
+    "yourPointsHelp": "クエストのタスク達成で獲得できます。",
+    "cubesOwned": "所持キューブ",
+    "cubesOwnedHelp1": "ガチャで獲得したキューブです。各キューブには報酬が入っている場合があります。",
+    "comingSoon": "近日公開！",
+    "rarityTitle": "ガチャのレアリティ",
+    "button": "ガチャを回す（消費: {cost} pts）",
+    "alerts": {
+      "failed": "ガチャに失敗しました。ポイントが不足している可能性があります。",
+      "error": "ガチャ実行中にエラーが発生しました。"
+    },
+    "gachaponAlt": "ガチャポン"
   }
 }
