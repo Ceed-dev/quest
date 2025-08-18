@@ -25,5 +25,26 @@
     "loading": "Loading quest details...",
     "totalPoints": "Total Points",
     "description": "Description"
+  },
+  "taskItem": {
+    "uploadImage": "Upload Image",
+    "removeImage": "Remove Image",
+    "submit": "Submit",
+    "status": {
+      "approved": "Approved",
+      "pending": "Pending",
+      "rejected": "Rejected",
+      "notSubmitted": "Not submitted"
+    },
+    "alt": {
+      "submitted": "Submitted image",
+      "selected": "Selected image"
+    },
+    "alerts": {
+      "selectImageFirst": "Please select an image before submitting.",
+      "confirmUpload": "Are you sure you want to upload this image and submit the task?",
+      "uploadSuccess": "Image uploaded and submission saved successfully.",
+      "uploadFail": "Failed to upload and save submission. Please try again."
+    }
   }
 }
