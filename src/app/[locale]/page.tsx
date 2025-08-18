@@ -2,25 +2,27 @@
 
 import { ItemCard } from "@/components/shared/ItemCard";
 import { useQuestsContext } from "@/context/questsContext";
+import { useTranslations } from "next-intl";
 
 export default function HomePage() {
   const { quests, isLoading, error } = useQuestsContext();
+  const t = useTranslations("home");
 
   if (isLoading) {
-    return <p className="text-center text-gray-500 py-10">Loading quests...</p>;
+    return <p className="text-center text-gray-500 py-10">{t("loading")}</p>;
   }
 
   if (error) {
     return (
       <p className="text-center text-red-500 py-10">
-        Error loading quests: {error.message}
+        {t("error")}: {error.message}
       </p>
     );
   }
 
   if (quests.length === 0) {
     return (
-      <p className="text-center text-gray-500 py-10">No quests available.</p>
+      <p className="text-center text-gray-500 py-10">{t("empty")}</p>
     );
   }
 

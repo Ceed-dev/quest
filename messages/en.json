@@ -15,5 +15,10 @@
     "step3Desc": "Manage your earned items in inventory and spin gacha for bonus rewards.",
     "finalStepTitle": "You're all set!",
     "finalStepDesc": "Enjoy completing quests and earning rewards!"
+  },
+  "home": {
+    "loading": "Loading quests...",
+    "error": "Error loading quests",
+    "empty": "No quests available."
   }
 }
