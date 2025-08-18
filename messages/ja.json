@@ -20,5 +20,10 @@
     "loading": "クエストを読み込み中…",
     "error": "クエストの読み込みでエラーが発生しました",
     "empty": "利用可能なクエストがありません。"
+  },
+  "questDetail": {
+    "loading": "クエスト詳細を読み込み中…",
+    "totalPoints": "合計ポイント",
+    "description": "説明"
   }
 }

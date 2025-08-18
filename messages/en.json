@@ -20,5 +20,10 @@
     "loading": "Loading quests...",
     "error": "Error loading quests",
     "empty": "No quests available."
+  },
+  "questDetail": {
+    "loading": "Loading quest details...",
+    "totalPoints": "Total Points",
+    "description": "Description"
   }
 }

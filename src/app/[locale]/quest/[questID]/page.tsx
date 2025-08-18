@@ -4,17 +4,15 @@ import { useQuestsContext } from "@/context/questsContext";
 import { notFound, useParams } from "next/navigation";
 import Image from "next/image";
 import { TaskItem } from "@/components/TaskItem";
+import { useTranslations } from "next-intl";
 
 export default function QuestDetailPage() {
   const { questID } = useParams() as { questID: string };
   const { quests, isLoading } = useQuestsContext();
+  const t = useTranslations("questDetail");
 
   if (isLoading) {
-    return (
-      <p className="text-center text-gray-500 py-10">
-        Loading quest details...
-      </p>
-    );
+    return <p className="text-center text-gray-500 py-10">{t("loading")}</p>;
   }
 
   const quest = quests.find((q) => q.id === questID);
@@ -40,7 +38,9 @@ export default function QuestDetailPage() {
         <p className="text-center text-lg font-semibold mb-2">
           {quest.catchphrase}
         </p>
-        <p className="text-gray-600">Total Points: {totalPoints}</p>
+        <p className="text-gray-600">
+          {t("totalPoints")}: {totalPoints}
+        </p>
       </div>
 
       {/* Tasks section */}
@@ -51,7 +51,7 @@ export default function QuestDetailPage() {
       </div>
 
       {/* Description section */}
-      <h2 className="text-xl font-extrabold mb-2">Description</h2>
+      <h2 className="text-xl font-extrabold mb-2">{t("description")}</h2>
       <p className="whitespace-pre-line text-sm font-bold mb-10">
         {quest.description}
       </p>
