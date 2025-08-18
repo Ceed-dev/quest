@@ -3,7 +3,8 @@
     "quests": "Quests",
     "profile": "Profile",
     "gacha": "Gacha",
-    "inventory": "Inventory"
+    "inventory": "Inventory",
+    "connect": "Connect"
   },
   "tutorial": {
     "step1Title": "How to do quests",

@@ -3,7 +3,8 @@
     "quests": "クエスト",
     "profile": "プロフィール",
     "gacha": "ガチャ",
-    "inventory": "インベントリ"
+    "inventory": "インベントリ",
+    "connect": "接続"
   },
   "tutorial": {
     "step1Title": "クエストの進め方",

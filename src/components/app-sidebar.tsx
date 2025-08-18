@@ -105,7 +105,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarContent>
       <SidebarFooter>
         {loading || !user ? (
-          <ConnectButton client={client} wallets={wallets} />
+          <ConnectButton
+            client={client}
+            wallets={wallets}
+            connectButton={{ label: tSidebar("connect") }}
+          />
         ) : (
           <NavUser
             user={{
