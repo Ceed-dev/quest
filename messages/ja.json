@@ -46,5 +46,17 @@
       "uploadSuccess": "画像をアップロードし、提出を保存しました。",
       "uploadFail": "アップロードと提出の保存に失敗しました。もう一度お試しください。"
     }
+  },
+  "profile": {
+    "needLoginError": "プロフィールを表示するにはログインが必要です。",
+    "emailLabel": "登録メールアドレス",
+    "totalPoints": "合計ポイント",
+    "xPlaceholder": "例）your_x_username",
+    "discordPlaceholder": "例）your_discord_username",
+    "saveButton": "IDを保存",
+    "savedToast": "IDを保存しました。",
+    "saveFailedToast": "IDの保存に失敗しました。もう一度お試しください。",
+    "comingSoon": "🕒 参加履歴・進捗ダッシュボード — 近日公開！",
+    "userIconAlt": "ユーザーアイコン"
   }
 }

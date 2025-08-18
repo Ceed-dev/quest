@@ -46,5 +46,17 @@
       "uploadSuccess": "Image uploaded and submission saved successfully.",
       "uploadFail": "Failed to upload and save submission. Please try again."
     }
+  },
+  "profile": {
+    "needLoginError": "You must be logged in to view your profile.",
+    "emailLabel": "Your registered email",
+    "totalPoints": "Total Points",
+    "xPlaceholder": "e.g. your_x_username",
+    "discordPlaceholder": "e.g. your_discord_username",
+    "saveButton": "Save IDs",
+    "savedToast": "Your IDs have been saved.",
+    "saveFailedToast": "Failed to save your IDs. Please try again.",
+    "comingSoon": "🕒 Participation History & Progress Dashboard — Coming Soon!",
+    "userIconAlt": "User icon"
   }
 }

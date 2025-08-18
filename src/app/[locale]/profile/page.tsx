@@ -7,24 +7,26 @@ import { useUser } from "@/providers/user-provider";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { updateUserSocialIds } from "@/lib/user";
+import { useTranslations } from "next-intl";
 
 export default function ProfilePage() {
   const { user } = useUser();
   const router = useRouter();
+  const t = useTranslations("profile");
 
   const [xId, setXId] = useState("");
   const [discordId, setDiscordId] = useState("");
 
   useEffect(() => {
     if (!user) {
-      toast.error("You must be logged in to view your profile.");
+      toast.error(t("needLoginError"));
       router.push("/");
       return;
     }
 
     setXId(user.socialIds.x || "");
     setDiscordId(user.socialIds.discord || "");
-  }, [user, router]);
+  }, [user, router, t]);
 
   const handleSave = async () => {
     if (!user) return;
@@ -35,10 +37,10 @@ export default function ProfilePage() {
         discord: discordId,
       });
 
-      toast.success("Your IDs have been saved.");
+      toast.success(t("savedToast"));
     } catch (err) {
       console.error("Failed to save IDs:", err);
-      toast.error("Failed to save your IDs. Please try again.");
+      toast.error(t("saveFailedToast"));
     }
   };
 
@@ -49,14 +51,14 @@ export default function ProfilePage() {
       <div className="flex items-center gap-4">
         <Image
           src="/qube.png"
-          alt="user-icon"
+          alt={t("userIconAlt")}
           width={64}
           height={64}
           className="rounded-full border-2 border-black"
         />
         <div>
           <h2 className="text-lg font-bold">{user.email}</h2>
-          <p className="text-sm text-gray-500">Your registered email</p>
+          <p className="text-sm text-gray-500">{t("emailLabel")}</p>
         </div>
       </div>
 
@@ -67,7 +69,9 @@ export default function ProfilePage() {
           transition-transform duration-200 ease-in-out transform
           translate-x-[-4px] translate-y-[-4px] hover:translate-x-0 hover:translate-y-0"
         >
-          <p className="text-sm font-bold mb-2 text-gray-500">Total Points</p>
+          <p className="text-sm font-bold mb-2 text-gray-500">
+            {t("totalPoints")}
+          </p>
           <p className="text-4xl font-extrabold text-black">
             {user.inventory.points} pts
           </p>
@@ -81,7 +85,7 @@ export default function ProfilePage() {
             type="text"
             value={xId}
             onChange={(e) => setXId(e.target.value)}
-            placeholder="e.g. your_x_username"
+            placeholder={t("xPlaceholder")}
             className="w-full border-2 border-white rounded-md px-4 py-2"
           />
         </div>
@@ -91,7 +95,7 @@ export default function ProfilePage() {
             type="text"
             value={discordId}
             onChange={(e) => setDiscordId(e.target.value)}
-            placeholder="e.g. your_discord_username"
+            placeholder={t("discordPlaceholder")}
             className="w-full border-2 border-white rounded-md px-4 py-2"
           />
         </div>
@@ -99,14 +103,12 @@ export default function ProfilePage() {
           onClick={handleSave}
           className="bg-lime-300 text-black px-6 py-2 rounded-md font-bold border-2 border-white hover:bg-lime-500 transition"
         >
-          Save IDs
+          {t("saveButton")}
         </button>
       </div>
 
       <div className="mt-10 text-center border-t border-white pt-6">
-        <p className="text-gray-400 font-semibold">
-          🕒 Participation History & Progress Dashboard — Coming Soon!
-        </p>
+        <p className="text-gray-400 font-semibold">{t("comingSoon")}</p>
       </div>
 
       <ToastContainer position="bottom-right" />
