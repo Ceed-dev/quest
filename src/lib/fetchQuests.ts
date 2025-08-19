@@ -10,24 +10,34 @@ import {
 // Firebase instance
 import { db } from "@/lib/firebase";
 
+import type { LocalizedText } from "@/types/i18n";
+import { coerceLText } from "@/lib/i18n-data";
+
 // Types
 import type { Quest, QuestTask } from "@/types/quest";
 
-// Firestore raw type (for incoming data)
-type FirestoreQuest = Omit<Quest, "id" | "timestamps" | "tasks"> & {
+type FirestoreQuest = {
+  project: {
+    name: LocalizedText;
+    logoUrl: string;
+  };
+  title: LocalizedText;
+  description?: LocalizedText;
+  catchphrase?: LocalizedText;
+  backgroundImageUrl: string;
+  tasks: {
+    id: string;
+    label: LocalizedText;
+    points: number;
+    actionButton?: {
+      label: LocalizedText;
+      url: string;
+    };
+  }[];
   timestamps: {
     createdAt: Timestamp;
     updatedAt: Timestamp;
   };
-  tasks: {
-    id: string;
-    label: string;
-    points: number;
-    actionButton?: {
-      label: string;
-      url: string;
-    };
-  }[];
 };
 
 /**
@@ -49,18 +59,23 @@ export const fetchQuests = async (): Promise<Quest[]> => {
     return {
       id: doc.id,
       project: {
-        name: data.project.name,
-        logoUrl: data.project.logoUrl,
+        name: coerceLText(data.project?.name),
+        logoUrl: data.project?.logoUrl,
       },
-      title: data.title,
-      description: data.description,
-      catchphrase: data.catchphrase,
+      title: coerceLText(data.title),
+      description: coerceLText(data.description ?? ""),
+      catchphrase: coerceLText(data.catchphrase ?? ""),
       backgroundImageUrl: data.backgroundImageUrl,
       tasks: data.tasks.map((task) => ({
         id: task.id,
-        label: task.label,
+        label: coerceLText(task.label),
         points: task.points,
-        actionButton: task.actionButton ?? undefined,
+        actionButton: task.actionButton
+          ? {
+              label: coerceLText(task.actionButton.label),
+              url: task.actionButton.url,
+            }
+          : undefined,
       })) as QuestTask[],
       timestamps: {
         createdAt: data.timestamps.createdAt.toDate(),

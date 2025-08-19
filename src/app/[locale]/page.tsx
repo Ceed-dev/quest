@@ -21,9 +21,7 @@ export default function HomePage() {
   }
 
   if (quests.length === 0) {
-    return (
-      <p className="text-center text-gray-500 py-10">{t("empty")}</p>
-    );
+    return <p className="text-center text-gray-500 py-10">{t("empty")}</p>;
   }
 
   return (

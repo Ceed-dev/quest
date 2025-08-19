@@ -3,7 +3,9 @@
 import React from "react";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import { getLText } from "@/lib/i18n-data";
+import type { LocalizedText } from "@/types/i18n";
 
 // Props type definition for the ItemCard component
 type ItemCardProps = {
@@ -11,8 +13,8 @@ type ItemCardProps = {
   type: "quest" | "game"; // Determines the display type (quest or game)
   backgroundImageUrl: string; // Background image URL for the card
   iconUrl?: string; // Optional icon image URL (used only for quests)
-  title: string; // Title text displayed on the card
-  description: string; // Description text displayed on the card
+  title: LocalizedText; // Title text displayed on the card
+  description: LocalizedText; // Description text displayed on the card
   points?: number; // Optional points value (used only for quests)
 };
 
@@ -26,6 +28,9 @@ export function ItemCard({
   points,
 }: ItemCardProps) {
   const t = useTranslations("itemCard");
+  const locale = useLocale() as "en" | "ja";
+  const titleText = getLText(title, locale);
+  const descText = getLText(description, locale);
 
   return (
     <Link href={`/${type}/${id}`}>
@@ -66,7 +71,7 @@ export function ItemCard({
                   : "text-3xl font-bold truncate"
               }
             >
-              {title}
+              {titleText}
             </h3>
             {type === "quest" && typeof points === "number" && (
               <p className="text-3xl font-bold">
@@ -74,7 +79,7 @@ export function ItemCard({
               </p>
             )}
             <p className={type === "quest" ? "text-2xl font-bold" : ""}>
-              {description}
+              {descText}
             </p>
           </div>
 

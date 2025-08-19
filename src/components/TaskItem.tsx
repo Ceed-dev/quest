@@ -10,7 +10,8 @@ import { useUser } from "@/providers/user-provider";
 import { client } from "@/lib/client";
 import { uploadTaskImageAndSaveSubmission } from "@/lib/uploadTaskImageAndSaveSubmission";
 import { fetchTaskSubmission } from "@/lib/fetchTaskSubmission";
-import { useTranslations } from "next-intl";
+import { getLText } from "@/lib/i18n-data";
+import { useTranslations, useLocale } from "next-intl";
 
 type TaskItemProps = {
   questId: string;
@@ -25,6 +26,7 @@ export function TaskItem({ questId, task }: TaskItemProps) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [submission, setSubmission] = useState<TaskSubmission | null>(null);
   const t = useTranslations("taskItem");
+  const locale = useLocale() as "en" | "ja";
 
   useEffect(() => {
     if (!user) return;
@@ -181,7 +183,7 @@ export function TaskItem({ questId, task }: TaskItemProps) {
                     ? "/check-box.svg"
                     : "/check-box-outline-blank.svg"
                 }
-                alt={task.label}
+                alt={getLText(task.label, locale)}
                 width={30}
                 height={30}
               />
@@ -203,7 +205,7 @@ export function TaskItem({ questId, task }: TaskItemProps) {
                 </span>
               )}
             </div>
-            <span>{task.label}</span>
+            <span>{getLText(task.label, locale)}</span>
           </div>
           <span className="text-sm font-bold text-gray-700 whitespace-nowrap">
             {task.points} pts
@@ -245,7 +247,7 @@ export function TaskItem({ questId, task }: TaskItemProps) {
         transition-transform duration-200 ease-in-out transform
         translate-x-[-4px] translate-y-[-4px] hover:translate-x-0 hover:translate-y-0 cursor-pointer"
                   >
-                    {task.actionButton.label}
+                    {getLText(task.actionButton.label, locale)}
                   </a>
                 </div>
               )}
