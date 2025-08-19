@@ -2,6 +2,10 @@ import { collection, getDocs, Timestamp } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { Quest } from "@/types/quest";
 import { TaskSubmission } from "@/types/taskSubmission";
+import { getLText } from "@/lib/i18n-data";
+import type { Locale } from "@/types/i18n";
+
+const ADMIN_LOCALE: Locale = "en";
 
 export type OverviewStats = {
   totalQuests: number;
@@ -82,8 +86,8 @@ export const fetchAdminStats = async (): Promise<AdminStats> => {
 
     return {
       id: quest.id,
-      name: quest.title,
-      projectName: quest.project.name,
+      name: getLText(quest.title, ADMIN_LOCALE),
+      projectName: getLText(quest.project.name, ADMIN_LOCALE),
       taskCount: quest.tasks.length,
       submissionCount: relatedSubmissions.length,
       uniqueSubmitters: uniqueUserIds.size,
