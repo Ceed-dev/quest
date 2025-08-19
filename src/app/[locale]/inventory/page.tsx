@@ -3,16 +3,18 @@
 import { useUser } from "@/providers/user-provider";
 import { InventoryCard } from "@/components/shared/InventoryCard";
 import { CubeRarity } from "@/types/cube";
+import { useTranslations } from "next-intl";
 
 const rarityList: CubeRarity[] = ["legendary", "superRare", "rare", "common"];
 
 export default function InventoryPage() {
   const { user, loading } = useUser();
+  const t = useTranslations("inventory");
 
   if (loading || !user) {
     return (
       <div className="w-full text-center py-20 text-gray-400">
-        Loading inventory...
+        {t("loading")}
       </div>
     );
   }
@@ -27,14 +29,14 @@ export default function InventoryPage() {
       {/* Header Summary */}
       <div className="flex flex-col md:flex-row justify-between items-center mb-8">
         <h1 className="text-3xl md:text-4xl font-bold mb-4 md:mb-0">
-          My Inventory
+          {t("title")}
         </h1>
         <div className="flex gap-6 text-sm md:text-base">
           <span>
-            Total Points: <strong>{user.inventory.points}</strong>
+            {t("totalPoints")}: <strong>{user.inventory.points}</strong>
           </span>
           <span>
-            Total Cubes: <strong>{totalCubes}</strong>
+            {t("totalCubes")}: <strong>{totalCubes}</strong>
           </span>
         </div>
       </div>

@@ -4,6 +4,7 @@ import * as React from "react";
 import Image from "next/image";
 import { Shield, User, Package, RefreshCcw } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
+import { useSearchParams } from "next/navigation";
 import { usePathname, useRouter } from "@/i18n/navigation";
 
 import { useUser } from "@/providers/user-provider";
@@ -22,6 +23,7 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
+import LanguageSwitch from "@/components/LanguageSwitch";
 import { useMemo, useState } from "react";
 
 import {
@@ -34,17 +36,20 @@ import {
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { user, loading, isNewUser, setIsNewUser } = useUser();
-  console.log("isNewUser:", isNewUser);
 
-  const locale = useLocale();
+  const locale = useLocale() as "en" | "ja";
   const pathname = usePathname();
   const router = useRouter();
+  const search = useSearchParams();
   const tSidebar = useTranslations("sidebar");
 
-  const toggleLocale = locale === "en" ? "ja" : "en";
+  const setAppLocale = (next: "en" | "ja") => {
+    const qs = search?.toString();
+    const href = qs ? `${pathname}?${qs}` : pathname;
 
-  const handleLocaleToggle = () => {
-    router.push(pathname, { locale: toggleLocale });
+    router.push(href, { locale: next });
+    document.cookie = `NEXT_LOCALE=${next}; Path=/; Max-Age=31536000; SameSite=Lax`;
+    if (typeof document !== "undefined") document.documentElement.lang = next;
   };
 
   const wallets = useMemo(
@@ -64,6 +69,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
         <TeamSwitcher />
+        <div className="flex items-center justify-start py-2">
+          <LanguageSwitch locale={locale} onLocaleChange={setAppLocale} />
+        </div>
       </SidebarHeader>
       <SidebarContent>
         <NavMain
@@ -96,19 +104,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         />
       </SidebarContent>
       <SidebarFooter>
-        <div className="flex items-center justify-start py-2">
-          <Button
-            variant="ghost"
-            size="sm"
-            className="text-xs text-muted-foreground hover:text-foreground"
-            onClick={handleLocaleToggle}
-          >
-            🌐 {toggleLocale === "en" ? "English" : "日本語"}
-          </Button>
-        </div>
-
         {loading || !user ? (
-          <ConnectButton client={client} wallets={wallets} />
+          <ConnectButton
+            client={client}
+            wallets={wallets}
+            connectButton={{ label: tSidebar("connect") }}
+          />
         ) : (
           <NavUser
             user={{

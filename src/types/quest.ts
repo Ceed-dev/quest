@@ -1,12 +1,14 @@
+import type { LocalizedText } from "./i18n";
+
 // Type definition for an individual task within a quest
 export type QuestTask = {
   id: string; // Unique task ID (e.g., "task1")
-  label: string; // Display label or instruction (e.g., "Follow @xxx on X")
+  label: LocalizedText; // Display label or instruction (e.g., "Follow @xxx on X")
   points: number; // Points awarded for completing this task (e.g., 10)
 
   // Optional button config for tasks that involve external actions (e.g., X follow, Discord join)
   actionButton?: {
-    label: string; // e.g., "Follow on X", "Join Discord"
+    label: LocalizedText; // e.g., "Follow on X", "Join Discord"
     url: string; // e.g., "https://twitter.com/xxx", "https://discord.gg/xxx"
   };
 };
@@ -17,14 +19,14 @@ export type Quest = {
 
   // Associated project (e.g., game or campaign)
   project: {
-    name: string; // Project name
+    name: LocalizedText; // Project name
     logoUrl: string; // Project logo image URL
   };
 
   // Main display content
-  title: string; // Quest title
-  description: string; // Quest description or details
-  catchphrase: string; // Highlighted tagline or slogan
+  title: LocalizedText; // Quest title
+  description: LocalizedText; // Quest description or details
+  catchphrase: LocalizedText; // Highlighted tagline or slogan
   backgroundImageUrl: string; // Background image for ItemCard or display
 
   // List of tasks associated with this quest

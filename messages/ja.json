@@ -3,7 +3,8 @@
     "quests": "クエスト",
     "profile": "プロフィール",
     "gacha": "ガチャ",
-    "inventory": "インベントリ"
+    "inventory": "インベントリ",
+    "connect": "接続"
   },
   "tutorial": {
     "step1Title": "クエストの進め方",
@@ -14,5 +15,85 @@
     "step3Desc": "獲得したアイテムはインベントリで管理し、ガチャを回して追加の報酬を手に入れましょう。",
     "finalStepTitle": "準備完了！",
     "finalStepDesc": "クエストを楽しみ、報酬を獲得してください！"
+  },
+  "home": {
+    "loading": "クエストを読み込み中…",
+    "error": "クエストの読み込みでエラーが発生しました",
+    "empty": "利用可能なクエストがありません。"
+  },
+  "itemCard": {
+    "earn": "{count} ポイント獲得",
+    "joinQuest": "クエストに参加",
+    "viewGame": "ゲームを見る",
+    "iconAlt": "アイコン"
+  },
+  "questDetail": {
+    "loading": "クエスト詳細を読み込み中…",
+    "totalPoints": "合計ポイント",
+    "description": "説明"
+  },
+  "taskItem": {
+    "uploadImage": "画像をアップロード",
+    "removeImage": "画像を削除",
+    "submit": "送信",
+    "status": {
+      "approved": "承認済み",
+      "pending": "審査中",
+      "rejected": "却下",
+      "notSubmitted": "未提出"
+    },
+    "alt": {
+      "submitted": "提出済みの画像",
+      "selected": "選択した画像"
+    },
+    "alerts": {
+      "selectImageFirst": "送信前に画像を選択してください。",
+      "confirmUpload": "この画像をアップロードしてタスクを提出します。よろしいですか？",
+      "uploadSuccess": "画像をアップロードし、提出を保存しました。",
+      "uploadFail": "アップロードと提出の保存に失敗しました。もう一度お試しください。"
+    }
+  },
+  "profile": {
+    "needLoginError": "プロフィールを表示するにはログインが必要です。",
+    "emailLabel": "登録メールアドレス",
+    "totalPoints": "合計ポイント",
+    "xPlaceholder": "例）your_x_username",
+    "discordPlaceholder": "例）your_discord_username",
+    "saveButton": "IDを保存",
+    "savedToast": "IDを保存しました。",
+    "saveFailedToast": "IDの保存に失敗しました。もう一度お試しください。",
+    "comingSoon": "🕒 参加履歴・進捗ダッシュボード — 近日公開！",
+    "userIconAlt": "ユーザーアイコン"
+  },
+  "inventory": {
+    "loading": "インベントリを読み込み中…",
+    "title": "インベントリ",
+    "totalPoints": "合計ポイント",
+    "totalCubes": "合計キューブ"
+  },
+  "inventoryCard": {
+    "rarity": {
+      "legendary": "レジェンド",
+      "superRare": "スーパーレア",
+      "rare": "レア",
+      "common": "ノーマル"
+    },
+    "quantity": "所持数",
+    "cubeAlt": "{rarity} キューブ"
+  },
+  "gacha": {
+    "title": "ガチャ",
+    "yourPoints": "所持ポイント",
+    "yourPointsHelp": "クエストのタスク達成で獲得できます。",
+    "cubesOwned": "所持キューブ",
+    "cubesOwnedHelp1": "ガチャで獲得したキューブです。各キューブには報酬が入っている場合があります。",
+    "comingSoon": "近日公開！",
+    "rarityTitle": "ガチャのレアリティ",
+    "button": "ガチャを回す（消費: {cost} pts）",
+    "alerts": {
+      "failed": "ガチャに失敗しました。ポイントが不足している可能性があります。",
+      "error": "ガチャ実行中にエラーが発生しました。"
+    },
+    "gachaponAlt": "ガチャポン"
   }
 }

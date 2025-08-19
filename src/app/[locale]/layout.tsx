@@ -11,7 +11,7 @@ import { UserProvider } from "@/providers/user-provider";
 import { QuestsProvider } from "@/context/questsContext";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
-import { GlobalHeader } from "@/components/GlobalHeader";
+// import { GlobalHeader } from "@/components/GlobalHeader";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -61,7 +61,7 @@ export default async function RootLayout({
                 <SidebarProvider>
                   <AppSidebar />
                   <SidebarInset>
-                    <GlobalHeader />
+                    {/* <GlobalHeader /> */}
                     {children}
                   </SidebarInset>
                 </SidebarProvider>

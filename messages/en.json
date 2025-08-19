@@ -3,7 +3,8 @@
     "quests": "Quests",
     "profile": "Profile",
     "gacha": "Gacha",
-    "inventory": "Inventory"
+    "inventory": "Inventory",
+    "connect": "Connect"
   },
   "tutorial": {
     "step1Title": "How to do quests",
@@ -14,5 +15,85 @@
     "step3Desc": "Manage your earned items in inventory and spin gacha for bonus rewards.",
     "finalStepTitle": "You're all set!",
     "finalStepDesc": "Enjoy completing quests and earning rewards!"
+  },
+  "home": {
+    "loading": "Loading quests...",
+    "error": "Error loading quests",
+    "empty": "No quests available."
+  },
+  "itemCard": {
+    "earn": "Earn {count, plural, one {# point} other {# points}}",
+    "joinQuest": "Join the Quest",
+    "viewGame": "View the Game",
+    "iconAlt": "Icon"
+  },
+  "questDetail": {
+    "loading": "Loading quest details...",
+    "totalPoints": "Total Points",
+    "description": "Description"
+  },
+  "taskItem": {
+    "uploadImage": "Upload Image",
+    "removeImage": "Remove Image",
+    "submit": "Submit",
+    "status": {
+      "approved": "Approved",
+      "pending": "Pending",
+      "rejected": "Rejected",
+      "notSubmitted": "Not submitted"
+    },
+    "alt": {
+      "submitted": "Submitted image",
+      "selected": "Selected image"
+    },
+    "alerts": {
+      "selectImageFirst": "Please select an image before submitting.",
+      "confirmUpload": "Are you sure you want to upload this image and submit the task?",
+      "uploadSuccess": "Image uploaded and submission saved successfully.",
+      "uploadFail": "Failed to upload and save submission. Please try again."
+    }
+  },
+  "profile": {
+    "needLoginError": "You must be logged in to view your profile.",
+    "emailLabel": "Your registered email",
+    "totalPoints": "Total Points",
+    "xPlaceholder": "e.g. your_x_username",
+    "discordPlaceholder": "e.g. your_discord_username",
+    "saveButton": "Save IDs",
+    "savedToast": "Your IDs have been saved.",
+    "saveFailedToast": "Failed to save your IDs. Please try again.",
+    "comingSoon": "🕒 Participation History & Progress Dashboard — Coming Soon!",
+    "userIconAlt": "User icon"
+  },
+  "inventory": {
+    "loading": "Loading inventory...",
+    "title": "My Inventory",
+    "totalPoints": "Total Points",
+    "totalCubes": "Total Cubes"
+  },
+  "inventoryCard": {
+    "rarity": {
+      "legendary": "Legendary",
+      "superRare": "Super Rare",
+      "rare": "Rare",
+      "common": "Common"
+    },
+    "quantity": "Quantity",
+    "cubeAlt": "{rarity} Qube"
+  },
+  "gacha": {
+    "title": "Gacha",
+    "yourPoints": "Your Points",
+    "yourPointsHelp": "Earned by completing tasks in quests.",
+    "cubesOwned": "Cubes Owned",
+    "cubesOwnedHelp1": "Collected by spinning the Gacha. Each Cube may contain rewards!",
+    "comingSoon": "Coming Soon!",
+    "rarityTitle": "Gacha Rarity",
+    "button": "Spin Gacha (Cost: {cost} pts)",
+    "alerts": {
+      "failed": "Gacha failed. You may not have enough points.",
+      "error": "An error occurred during gacha."
+    },
+    "gachaponAlt": "Gachapon machine"
   }
 }

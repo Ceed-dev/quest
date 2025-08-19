@@ -10,6 +10,8 @@ import { useUser } from "@/providers/user-provider";
 import { client } from "@/lib/client";
 import { uploadTaskImageAndSaveSubmission } from "@/lib/uploadTaskImageAndSaveSubmission";
 import { fetchTaskSubmission } from "@/lib/fetchTaskSubmission";
+import { getLText } from "@/lib/i18n-data";
+import { useTranslations, useLocale } from "next-intl";
 
 type TaskItemProps = {
   questId: string;
@@ -23,6 +25,8 @@ export function TaskItem({ questId, task }: TaskItemProps) {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [submission, setSubmission] = useState<TaskSubmission | null>(null);
+  const t = useTranslations("taskItem");
+  const locale = useLocale() as "en" | "ja";
 
   useEffect(() => {
     if (!user) return;
@@ -76,13 +80,11 @@ export function TaskItem({ questId, task }: TaskItemProps) {
   const handleSubmit = async () => {
     if (!user) return;
     if (!selectedFile) {
-      alert("Please select an image before submitting.");
+      alert(t("alerts.selectImageFirst"));
       return;
     }
 
-    const confirmed = window.confirm(
-      "Are you sure you want to upload this image and submit the task?",
-    );
+    const confirmed = window.confirm(t("alerts.confirmUpload"));
     if (!confirmed) {
       return;
     }
@@ -103,10 +105,10 @@ export function TaskItem({ questId, task }: TaskItemProps) {
       });
       setSubmission(updatedSubmission);
 
-      alert("Image uploaded and submission saved successfully.");
+      alert(t("alerts.uploadSuccess"));
     } catch (err) {
       console.error(err);
-      alert("Failed to upload and save submission. Please try again.");
+      alert(t("alerts.uploadFail"));
     }
   };
 
@@ -124,7 +126,7 @@ export function TaskItem({ questId, task }: TaskItemProps) {
                 transition-transform duration-200 ease-in-out transform
                 translate-x-[-4px] translate-y-[-4px] hover:translate-x-0 hover:translate-y-0 cursor-pointer"
       >
-        {selectedImage ? "Remove Image" : "Upload Image"}
+        {selectedImage ? t("removeImage") : t("uploadImage")}
       </label>
       <input
         type="file"
@@ -152,7 +154,7 @@ export function TaskItem({ questId, task }: TaskItemProps) {
                 transition-transform duration-200 ease-in-out transform
                 translate-x-[-4px] translate-y-[-4px] hover:translate-x-0 hover:translate-y-0"
       >
-        Submit
+        {t("submit")}
       </button>
     </div>
   );
@@ -181,7 +183,7 @@ export function TaskItem({ questId, task }: TaskItemProps) {
                     ? "/check-box.svg"
                     : "/check-box-outline-blank.svg"
                 }
-                alt={task.label}
+                alt={getLText(task.label, locale)}
                 width={30}
                 height={30}
               />
@@ -195,15 +197,15 @@ export function TaskItem({ questId, task }: TaskItemProps) {
                         : "bg-red-300 text-red-900"
                   }`}
                 >
-                  {submission.status.toUpperCase()}
+                  {t(`status.${submission.status}`)}
                 </span>
               ) : (
                 <span className="px-2 py-1 rounded-full text-xs font-bold bg-gray-300 text-gray-700">
-                  NOT SUBMITTED
+                  {t("status.notSubmitted")}
                 </span>
               )}
             </div>
-            <span>{task.label}</span>
+            <span>{getLText(task.label, locale)}</span>
           </div>
           <span className="text-sm font-bold text-gray-700 whitespace-nowrap">
             {task.points} pts
@@ -217,7 +219,7 @@ export function TaskItem({ questId, task }: TaskItemProps) {
             {submission?.imageUrl ? (
               <Image
                 src={submission.imageUrl}
-                alt="Submitted"
+                alt={t("alt.submitted")}
                 width={400}
                 height={400}
                 className="rounded border"
@@ -225,7 +227,7 @@ export function TaskItem({ questId, task }: TaskItemProps) {
             ) : selectedImage ? (
               <Image
                 src={selectedImage}
-                alt="Selected"
+                alt={t("alt.selected")}
                 width={400}
                 height={400}
                 className="rounded border"
@@ -245,7 +247,7 @@ export function TaskItem({ questId, task }: TaskItemProps) {
         transition-transform duration-200 ease-in-out transform
         translate-x-[-4px] translate-y-[-4px] hover:translate-x-0 hover:translate-y-0 cursor-pointer"
                   >
-                    {task.actionButton.label}
+                    {getLText(task.actionButton.label, locale)}
                   </a>
                 </div>
               )}
