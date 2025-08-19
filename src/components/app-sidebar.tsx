@@ -46,10 +46,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const setAppLocale = (next: "en" | "ja") => {
     const qs = search?.toString();
     const href = qs ? `${pathname}?${qs}` : pathname;
-
-    router.push(href, { locale: next });
-    document.cookie = `NEXT_LOCALE=${next}; Path=/; Max-Age=31536000; SameSite=Lax`;
-    if (typeof document !== "undefined") document.documentElement.lang = next;
+    router.replace(href, { locale: next });
   };
 
   const wallets = useMemo(
