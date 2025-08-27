@@ -1,18 +1,32 @@
-import { NextIntlClientProvider, hasLocale } from "next-intl";
-import { notFound } from "next/navigation";
-import { routing } from "@/i18n/routing";
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import { ReactNode } from "react";
+// ----------------------------------------------------
+// App Root Layout (per-locale)
+// ----------------------------------------------------
+// • Applies global fonts and dark theme
+// • Validates locale (Next-Intl)
+// • Wraps the app with shared providers
+// • Renders the fixed GlobalHeader + page content
+// ----------------------------------------------------
+
 import "../globals.css";
+
+import type { ReactNode } from "react";
+import type { Metadata } from "next";
+
+import { notFound } from "next/navigation";
+import { NextIntlClientProvider, hasLocale } from "next-intl";
+
+import { Geist, Geist_Mono } from "next/font/google";
+
+import GlobalHeader from "@/components/GlobalHeader";
+import { routing } from "@/i18n/routing";
 
 import { ThirdwebProvider } from "thirdweb/react";
 import { UserProvider } from "@/providers/user-provider";
 import { QuestsProvider } from "@/context/questsContext";
-import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/app-sidebar";
-// import { GlobalHeader } from "@/components/GlobalHeader";
 
+// ----------------------------------------------------
+// Fonts (variable)
+// ----------------------------------------------------
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -23,33 +37,41 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+// ----------------------------------------------------
+// Static params for localized routes
+// ----------------------------------------------------
 export function generateStaticParams() {
   return [{ locale: "en" }, { locale: "ja" }];
 }
 
+// ----------------------------------------------------
+// Page metadata
+// ----------------------------------------------------
 export const metadata: Metadata = {
   title: "Quest App",
   description: "Explore and complete quests",
 };
 
-// TODO: Apply a global theme (black base + lime accent) using Tailwind's custom theme config.
-// For now, apply colors individually with Tailwind classes on each page.
+type RootLayoutProps = {
+  children: ReactNode;
+  params: Promise<{ locale: string }>;
+};
+
+// ----------------------------------------------------
+// Root layout
+// ----------------------------------------------------
+// TODO: Once the Tailwind theme tokens are stable, replace
+//       hardcoded utility classes with semantic tokens.
+//       Ref: https://ui.shadcn.com/docs/dark-mode/next
 export default async function RootLayout({
   children,
   params,
-}: {
-  children: ReactNode;
-  params: Promise<{ locale: string }>;
-}) {
-  // Ensure that the incoming `locale` is valid
+}: RootLayoutProps) {
+  // Validate the incoming locale
   const { locale } = await params;
-  if (!hasLocale(routing.locales, locale)) {
-    notFound();
-  }
+  if (!hasLocale(routing.locales, locale)) notFound();
 
   return (
-    // TODO: Replace hardcoded tailwind classes with theme tokens once theme setup is stable.
-    // https://ui.shadcn.com/docs/dark-mode/next
     <html lang={locale} className="dark">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
@@ -58,13 +80,11 @@ export default async function RootLayout({
           <ThirdwebProvider>
             <UserProvider>
               <QuestsProvider>
-                <SidebarProvider>
-                  <AppSidebar />
-                  <SidebarInset>
-                    {/* <GlobalHeader /> */}
-                    {children}
-                  </SidebarInset>
-                </SidebarProvider>
+                {/* Fixed site header */}
+                <GlobalHeader />
+
+                {/* Page content (individual routes render here) */}
+                {children}
               </QuestsProvider>
             </UserProvider>
           </ThirdwebProvider>
