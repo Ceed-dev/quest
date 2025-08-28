@@ -38,12 +38,7 @@ export function TaskItem({ questId, task }: TaskItemProps) {
           questId,
           taskId: task.id,
         });
-
-        if (submissionData) {
-          setSubmission(submissionData);
-        } else {
-          setSubmission(null);
-        }
+        setSubmission(submissionData ?? null);
       } catch (err) {
         console.error("Failed to fetch task submission:", err);
       }
@@ -67,14 +62,11 @@ export function TaskItem({ questId, task }: TaskItemProps) {
         const connectedWallet = await connect({ client, wallets });
         if (connectedWallet) setOpen(true);
       } catch (err) {
-        console.warn(
-          "User closed the wallet connection modal or rejected the request.",
-          err,
-        );
+        console.warn("Wallet connect dismissed:", err);
       }
       return;
     }
-    setOpen(!open);
+    setOpen((v) => !v);
   };
 
   const handleSubmit = async () => {
@@ -83,11 +75,8 @@ export function TaskItem({ questId, task }: TaskItemProps) {
       alert(t("alerts.selectImageFirst"));
       return;
     }
-
     const confirmed = window.confirm(t("alerts.confirmUpload"));
-    if (!confirmed) {
-      return;
-    }
+    if (!confirmed) return;
 
     try {
       await uploadTaskImageAndSaveSubmission({
@@ -98,13 +87,12 @@ export function TaskItem({ questId, task }: TaskItemProps) {
         points: task.points,
       });
 
-      const updatedSubmission = await fetchTaskSubmission({
+      const updated = await fetchTaskSubmission({
         userId: user.walletAddress!,
         questId,
         taskId: task.id,
       });
-      setSubmission(updatedSubmission);
-
+      setSubmission(updated);
       alert(t("alerts.uploadSuccess"));
     } catch (err) {
       console.error(err);
@@ -112,19 +100,22 @@ export function TaskItem({ questId, task }: TaskItemProps) {
     }
   };
 
+  // ---- shared button class for the inner actions (Figma spec) ----
+  const innerBtnClass =
+    "inline-flex items-center justify-center rounded-md bg-[#1C1F21] text-white px-4 py-2 text-sm font-semibold transition hover:opacity-90";
+
   const UploadButton = (
-    <div className="relative w-fit h-fit flex flex-col items-center">
-      <div className="absolute top-0 left-0 w-full h-full rounded-md border-2 border-white z-0" />
+    <>
       <label
         htmlFor={`upload-${task.id}`}
+        className={innerBtnClass + " cursor-pointer"}
         onClick={() => {
+          // 既に選択されていたらクリックで解除できる挙動は維持
           if (selectedImage) {
-            setSelectedImage(null); // Remove image if already selected
+            setSelectedImage(null);
+            setSelectedFile(null);
           }
         }}
-        className="relative z-10 bg-blue-300 font-bold py-2 px-6 rounded-md text-black border-2 border-white
-                transition-transform duration-200 ease-in-out transform
-                translate-x-[-4px] translate-y-[-4px] hover:translate-x-0 hover:translate-y-0 cursor-pointer"
       >
         {selectedImage ? t("removeImage") : t("uploadImage")}
       </label>
@@ -136,132 +127,111 @@ export function TaskItem({ questId, task }: TaskItemProps) {
         onChange={(e) => {
           const file = e.target.files?.[0];
           if (file) {
-            const imageUrl = URL.createObjectURL(file);
-            setSelectedImage(imageUrl);
+            setSelectedImage(URL.createObjectURL(file));
             setSelectedFile(file);
           }
         }}
       />
-    </div>
+    </>
   );
 
   const SubmitButton = (
-    <div className="relative w-fit h-fit">
-      <div className="absolute top-0 left-0 w-full h-full rounded-md border-2 border-white z-0" />
-      <button
-        onClick={handleSubmit}
-        className="relative z-10 bg-lime-300 font-bold py-2 px-6 rounded-md text-black border-2 border-white
-                transition-transform duration-200 ease-in-out transform
-                translate-x-[-4px] translate-y-[-4px] hover:translate-x-0 hover:translate-y-0"
-      >
-        {t("submit")}
-      </button>
-    </div>
+    <button type="button" onClick={handleSubmit} className={innerBtnClass}>
+      {t("submit")}
+    </button>
   );
 
   return (
     <div className="w-full">
-      <div
+      {/* ==== Collapsed row (header) ==== */}
+      <button
+        type="button"
         onClick={handleToggle}
-        className="relative w-full h-fit cursor-pointer"
+        aria-expanded={open}
+        className={`
+          w-full select-none
+          bg-[#7F0019]                /* 行の背景 = 深い赤 */
+          text-white
+          px-4 py-3
+          flex items-center justify-between gap-4
+          shadow-sm
+          ${open ? "rounded-t-md" : "rounded-md"}
+        `}
       >
-        <div className="absolute top-0 left-0 w-full h-full rounded-md border-2 border-white z-0" />
-        <div
-          className={`relative z-10 flex items-center justify-between gap-3
-                      px-4 py-3 font-bold bg-white text-black
-                      ${
-                        open
-                          ? "rounded-t-md translate-x-0 translate-y-0"
-                          : "rounded-md transition-transform duration-200 ease-in-out transform translate-x-[-4px] translate-y-[-4px] hover:translate-x-0 hover:translate-y-0"
-                      }`}
-        >
-          <div className="flex flex-col md:flex-row items-center md:gap-3">
-            <div className="flex items-center gap-3 mr-auto">
+        {/* left: checkbox + label */}
+        <span className="flex items-center gap-3 min-w-0">
+          {/* コントラスト確保のため白い箱でアイコンを載せる */}
+          <span className="grid place-items-center w-7 h-7 p-1 rounded-[4px] bg-white shrink-0">
+            {submission?.status === "approved" && (
               <Image
-                src={
-                  submission && submission.status === "approved"
-                    ? "/check-box.svg"
-                    : "/check-box-outline-blank.svg"
-                }
-                alt={getLText(task.label, locale)}
+                src="/status-approved.svg"
+                alt="Approved"
                 width={30}
                 height={30}
               />
-              {submission ? (
-                <span
-                  className={`px-2 py-1 rounded-full text-xs font-bold ${
-                    submission.status === "approved"
-                      ? "bg-green-300 text-green-900"
-                      : submission.status === "pending"
-                        ? "bg-yellow-300 text-yellow-900"
-                        : "bg-red-300 text-red-900"
-                  }`}
-                >
-                  {t(`status.${submission.status}`)}
-                </span>
-              ) : (
-                <span className="px-2 py-1 rounded-full text-xs font-bold bg-gray-300 text-gray-700">
-                  {t("status.notSubmitted")}
-                </span>
-              )}
-            </div>
-            <span>{getLText(task.label, locale)}</span>
-          </div>
-          <span className="text-sm font-bold text-gray-700 whitespace-nowrap">
-            {task.points} pts
+            )}
           </span>
-        </div>
-      </div>
+          <span className="font-semibold truncate">
+            {getLText(task.label, locale)}
+          </span>
+        </span>
+        {task.points} pts
+      </button>
 
+      {/* ==== Expanded content ==== */}
       {open && (
-        <div className="border-2 border-white rounded-b-md overflow-hidden">
-          <div className="flex flex-col gap-4 items-center p-4">
+        <div className="border-2 border-[#7F0019] rounded-b-md bg-white overflow-hidden">
+          <div className="p-4 flex flex-col items-center gap-4">
+            {/* status pill (既存仕様は維持) */}
+            {submission && (
+              <span
+                className={`px-2 py-1 rounded-full text-xs font-bold ${submission.status === "approved"
+                    ? "bg-green-200 text-green-900"
+                    : submission.status === "pending"
+                      ? "bg-yellow-200 text-yellow-900"
+                      : "bg-red-200 text-red-900"
+                  }`}
+              >
+                {t(`status.${submission.status}`)}
+              </span>
+            )}
+            {/* Preview (submitted or selected) */}
             {submission?.imageUrl ? (
               <Image
                 src={submission.imageUrl}
                 alt={t("alt.submitted")}
-                width={400}
-                height={400}
+                width={480}
+                height={480}
                 className="rounded border"
               />
             ) : selectedImage ? (
               <Image
                 src={selectedImage}
                 alt={t("alt.selected")}
-                width={400}
-                height={400}
+                width={480}
+                height={480}
                 className="rounded border"
               />
             ) : null}
 
-            <div className="flex gap-4">
-              {/* Action Button (e.g., Follow on X) */}
+            {/* Actions */}
+            <div className="flex flex-wrap gap-3 justify-center">
               {task.actionButton && (
-                <div className="relative w-fit h-fit flex flex-col items-center">
-                  <div className="absolute top-0 left-0 w-full h-full rounded-md border-2 border-white z-0" />
-                  <a
-                    href={task.actionButton.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="relative z-10 bg-indigo-300 font-bold py-2 px-6 rounded-md text-black border-2 border-white
-        transition-transform duration-200 ease-in-out transform
-        translate-x-[-4px] translate-y-[-4px] hover:translate-x-0 hover:translate-y-0 cursor-pointer"
-                  >
-                    {getLText(task.actionButton.label, locale)}
-                  </a>
-                </div>
+                <a
+                  href={task.actionButton.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={innerBtnClass}
+                >
+                  {getLText(task.actionButton.label, locale)}
+                </a>
               )}
 
-              {submission === null &&
-                !selectedImage &&
-                // Upload Button
-                UploadButton}
-
+              {/* Upload / Remove */}
+              {submission === null && !selectedImage && UploadButton}
               {submission === null && selectedImage && (
                 <>
-                  {/* Remove Button */}
                   {UploadButton}
-                  {/* Submit Button */}
                   {SubmitButton}
                 </>
               )}
