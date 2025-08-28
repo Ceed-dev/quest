@@ -7,88 +7,121 @@ import { useLocale, useTranslations } from "next-intl";
 import { getLText } from "@/lib/i18n-data";
 import type { LocalizedText } from "@/types/i18n";
 
-// Props type definition for the ItemCard component
+// Props
 type ItemCardProps = {
-  id: string; // Unique identifier used for building the detail page link (e.g., /quest/[id])
-  type: "quest" | "game"; // Determines the display type (quest or game)
-  backgroundImageUrl: string; // Background image URL for the card
-  iconUrl?: string; // Optional icon image URL (used only for quests)
-  title: LocalizedText; // Title text displayed on the card
-  description: LocalizedText; // Description text displayed on the card
-  points?: number; // Optional points value (used only for quests)
+  id: string;
+  type: "quest" | "game";
+  backgroundImageUrl: string;
+  iconUrl?: string;
+  projectName: LocalizedText | string;
+  title: LocalizedText;
+  description: LocalizedText;
+  points?: number;
 };
+
+// LocalizedText | string を安全に取り出す
+function getText(value: LocalizedText | string, locale: "en" | "ja") {
+  return typeof value === "string" ? value : getLText(value, locale);
+}
 
 export function ItemCard({
   id,
   type,
   backgroundImageUrl,
   iconUrl,
+  projectName,
   title,
   description,
   points,
 }: ItemCardProps) {
   const t = useTranslations("itemCard");
   const locale = useLocale() as "en" | "ja";
+
+  const projectNameText = getText(projectName, locale);
   const titleText = getLText(title, locale);
   const descText = getLText(description, locale);
 
   return (
-    <Link href={`/${type}/${id}`}>
+    <Link href={`/${type}/${id}`} className="group block">
       <div
-        className="relative w-full aspect-[2/3] rounded-lg shadow-md overflow-hidden bg-cover bg-center
-                 transition-transform duration-300 hover:-translate-y-2"
-        // Set the background image using inline style
-        style={{
-          backgroundImage: `url(${backgroundImageUrl})`,
-        }}
+        className={[
+          "relative w-full rounded-2xl overflow-hidden",
+          "bg-[#1C1C1C] ring-1 ring-white/5 shadow-[0_2px_12px_rgba(0,0,0,0.35)]",
+          "transition-transform duration-300 group-hover:-translate-y-1",
+        ].join(" ")}
       >
-        {/* Dark overlay for better contrast */}
-        <div className="absolute inset-0 bg-black/20"></div>
-
-        {/* Main content layer */}
-        <div className="relative z-10 flex flex-col justify-between h-full">
-          {/* Top section: icon (only shown for quests) */}
-          <div className="flex justify-between items-start">
-            {type === "quest" && iconUrl && (
-              <div className="w-10 h-10 bg-black/50 rounded overflow-hidden mx-4 mt-4">
+        <div className="flex flex-col p-4 gap-3">
+          {/* Top: icon + project name */}
+          <div className="flex items-center gap-3">
+            {iconUrl ? (
+              <span className="inline-flex h-9 w-9 items-center justify-center overflow-hidden rounded-lg ring-1 ring-white/10 bg-black/30">
                 <Image
                   src={iconUrl}
                   alt={t("iconAlt")}
-                  width={40}
-                  height={40}
-                  className="object-cover"
+                  width={36}
+                  height={36}
+                  className="h-full w-full object-cover"
                 />
-              </div>
-            )}
+              </span>
+            ) : null}
+            <span className="text-white text-[18px] font-semibold leading-none line-clamp-1">
+              {projectNameText}
+            </span>
           </div>
 
-          {/* Middle section: title, points (if quest), and description */}
-          <div className="text-white bg-black/50 h-[50%] p-4">
+          {/* Square thumbnail */}
+          <div className="relative mt-1 aspect-square w-full overflow-hidden rounded-xl ring-1 ring-white/10 bg-black/30">
+            <Image
+              src={backgroundImageUrl}
+              alt={titleText}
+              fill
+              sizes="(max-width: 768px) 100vw, 33vw"
+              className="object-cover"
+            />
+          </div>
+
+          {/* Texts */}
+          <div className="mt-1 space-y-2">
             <h3
-              className={
-                type === "quest"
-                  ? "font-semibold truncate"
-                  : "text-3xl font-bold truncate"
-              }
+              className="text-[#D5B77A] text-[24px] font-semibold leading-tight line-clamp-2 min-h-[2.5em]"
+              title={titleText}
             >
               {titleText}
             </h3>
-            {type === "quest" && typeof points === "number" && (
-              <p className="text-3xl font-bold">
-                {t("earn", { count: points })}
-              </p>
-            )}
-            <p className={type === "quest" ? "text-2xl font-bold" : ""}>
+
+            <p
+              className="text-white text-[20px] leading-snug line-clamp-2 min-h-[2.75em]"
+              title={descText}
+            >
               {descText}
             </p>
+
+            {/* Points pill */}
+            {type === "quest" && typeof points === "number" && (
+              <span
+                className="
+      inline-flex h-[29px] w-[123px] items-center justify-center
+      rounded-[5px] bg-[#D5B77A] text-[#1C1C1C]
+      text-[16px] font-bold
+    "
+              >
+                {t("earn", { count: points })}
+              </span>
+            )}
           </div>
 
-          {/* Bottom section: action button */}
-          <div className="px-4 pb-4">
-            <button className="w-full bg-white text-black font-semibold rounded-full py-2">
-              {type === "quest" ? t("joinQuest") : t("viewGame")}
-            </button>
-          </div>
+          {/* CTA button (Figma: 197x50, radius 10, white fill, #232323 text/border) */}
+          <button
+            className={[
+              "inline-flex items-center justify-center",
+              "h-[50px] w-[197px] rounded-[10px]",
+              "bg-white text-[#232323] font-bold text-[24px]",
+              "transition-transform duration-150",
+              "group-hover:-translate-y-0.5 active:translate-y-0",
+            ].join(" ")}
+          >
+            {type === "quest" ? t("joinQuest") : t("viewGame")}
+          </button>
         </div>
       </div>
     </Link>

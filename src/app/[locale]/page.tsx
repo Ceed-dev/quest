@@ -33,6 +33,7 @@ export default function HomePage() {
           type="quest"
           backgroundImageUrl={quest.backgroundImageUrl}
           iconUrl={quest.project.logoUrl}
+          projectName={quest.project.name}
           title={quest.title}
           description={quest.catchphrase}
           points={quest.tasks.reduce((sum, task) => sum + task.points, 0)} // Total points calculation
