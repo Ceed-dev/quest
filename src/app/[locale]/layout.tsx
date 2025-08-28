@@ -84,7 +84,7 @@ export default async function RootLayout({
               <QuestsProvider>
                 <div className="min-h-screen flex flex-col">
                   <GlobalHeader />
-                  <main className="flex-1">{children}</main>
+                  <main className="flex-1 px-5 xl:px-16">{children}</main>
                   <Footer />
                 </div>
               </QuestsProvider>

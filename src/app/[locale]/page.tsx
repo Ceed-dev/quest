@@ -25,7 +25,7 @@ export default function HomePage() {
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 p-5 w-full max-w-screen-xl mx-auto">
+    <div className="grid grid-cols-1 md:grid-cors-2 xl:grid-cols-4 gap-5 xl:gap-10 w-full mx-auto">
       {quests.map((quest) => (
         <ItemCard
           key={quest.id}

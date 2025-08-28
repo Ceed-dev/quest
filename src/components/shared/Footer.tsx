@@ -8,7 +8,7 @@ export default function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="mt-16 flex justify-center px-5">
+    <footer className="mt-16 flex justify-center px-5 xl:px-16">
       <div
         className="
           w-full text-[#1C1C1C] py-3
@@ -49,7 +49,7 @@ export default function Footer() {
             </a>
 
             <a
-              href="https://discord.com/invite/znnZh4ZDdK"
+              href="https://t.me/"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1 hover:underline"
