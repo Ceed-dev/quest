@@ -24,6 +24,8 @@ import { ThirdwebProvider } from "thirdweb/react";
 import { UserProvider } from "@/providers/user-provider";
 import { QuestsProvider } from "@/context/questsContext";
 
+import Footer from "@/components/shared/Footer";
+
 // ----------------------------------------------------
 // Fonts (variable)
 // ----------------------------------------------------
@@ -72,7 +74,7 @@ export default async function RootLayout({
   if (!hasLocale(routing.locales, locale)) notFound();
 
   return (
-    <html lang={locale} className="dark">
+    <html lang={locale}>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
@@ -80,11 +82,11 @@ export default async function RootLayout({
           <ThirdwebProvider>
             <UserProvider>
               <QuestsProvider>
-                {/* Fixed site header */}
-                <GlobalHeader />
-
-                {/* Page content (individual routes render here) */}
-                {children}
+                <div className="min-h-screen flex flex-col">
+                  <GlobalHeader />
+                  <main className="flex-1">{children}</main>
+                  <Footer />
+                </div>
               </QuestsProvider>
             </UserProvider>
           </ThirdwebProvider>
