@@ -75,6 +75,8 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  --bg-from: #f7e1d0;
+  --bg-to: #ebd3bf;
 }
 
 .dark {
@@ -116,6 +118,9 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
+    min-height: 100svh;
+    background: linear-gradient(180deg, var(--bg-from), var(--bg-to));
+    background-color: var(--bg-from);
   }
 }
