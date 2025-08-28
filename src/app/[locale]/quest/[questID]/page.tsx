@@ -8,6 +8,9 @@ import { useLocale, useTranslations } from "next-intl";
 import { getLText } from "@/lib/i18n-data";
 import { SquareArrowOutUpRight } from "lucide-react";
 import React from "react";
+import { ItemCard } from "@/components/shared/ItemCard";
+import { Link } from "@/i18n/navigation";
+import { ArrowDownCircle } from "lucide-react";
 
 export default function QuestDetailPage() {
   const { questID } = useParams() as { questID: string };
@@ -15,7 +18,6 @@ export default function QuestDetailPage() {
   const t = useTranslations("questDetail");
   const locale = useLocale() as "en" | "ja";
 
-  // ▼ ここに移動（早期 return より前）
   const [copied, setCopied] = React.useState(false);
   const handleShare = React.useCallback(async () => {
     try {
@@ -41,6 +43,8 @@ export default function QuestDetailPage() {
   if (!quest) return notFound();
 
   const totalPoints = quest.tasks.reduce((sum, task) => sum + task.points, 0);
+  const forYou = quests.filter((q) => q.id !== questID).slice(0, 4);
+
   return (
     <div className="w-full mx-auto">
       {/* ====== TOP: Quest summary card (full width) ====== */}
@@ -126,9 +130,46 @@ export default function QuestDetailPage() {
       <h2 className="text-[32px] text-[#7F0019] font-extrabold mb-2">
         {t("description")}
       </h2>
-      <p className="text-[24px] text-[#1C1C1C] mb-10">
+      <p className="text-[24px] text-[#1C1C1C]">
         {getLText(quest.description, locale)}
       </p>
+
+      {/* ====== For you ====== */}
+      <section className="mt-12">
+        <h3 className="mb-4 text-[32px] font-extrabold text-[#7F0019]">
+          FOR YOU
+        </h3>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5 xl:gap-10 w-full">
+          {forYou.map((q) => (
+            <ItemCard
+              key={q.id}
+              id={q.id}
+              type="quest"
+              backgroundImageUrl={q.backgroundImageUrl}
+              iconUrl={q.project.logoUrl}
+              projectName={q.project.name}
+              title={getLText(q.title, locale)}
+              description={getLText(q.catchphrase, locale)}
+              points={q.tasks.reduce((sum, task) => sum + task.points, 0)}
+            />
+          ))}
+        </div>
+
+        <div className="mt-6 flex justify-center">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-3 rounded-md bg-[#7F0019] px-5 py-2 text-white font-semibold shadow-sm hover:opacity-90 transition"
+          >
+            <ArrowDownCircle
+              className="h-6 w-6"
+              strokeWidth={2.2}
+              aria-hidden="true"
+            />
+            <span>Explore more quest</span>
+          </Link>
+        </div>
+      </section>
     </div>
   );
 }
