@@ -123,8 +123,10 @@ export default function QuestDetailPage() {
       </div>
 
       {/* ====== Description ====== */}
-      <h2 className="text-xl font-extrabold mb-2">{t("description")}</h2>
-      <p className="whitespace-pre-line text-sm font-bold mb-10">
+      <h2 className="text-[32px] text-[#7F0019] font-extrabold mb-2">
+        {t("description")}
+      </h2>
+      <p className="text-[24px] text-[#1C1C1C] mb-10">
         {getLText(quest.description, locale)}
       </p>
     </div>
