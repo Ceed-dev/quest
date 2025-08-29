@@ -25,20 +25,28 @@ export default function HomePage() {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cors-2 xl:grid-cols-4 gap-5 xl:gap-10 w-full mx-auto">
-      {quests.map((quest) => (
-        <ItemCard
-          key={quest.id}
-          id={quest.id}
-          type="quest"
-          backgroundImageUrl={quest.backgroundImageUrl}
-          iconUrl={quest.project.logoUrl}
-          projectName={quest.project.name}
-          title={quest.title}
-          description={quest.catchphrase}
-          points={quest.tasks.reduce((sum, task) => sum + task.points, 0)} // Total points calculation
-        />
-      ))}
+    <div className="w-full">
+      {/* 見出し（左上） */}
+      <h1 className="mb-6 text-[40px] md:text-[48px] xl:text-[64px] font-extrabold leading-none tracking-wide uppercase text-[#7F0019]">
+        QUEST EXPLORATION
+      </h1>
+
+      {/* カードグリッド */}
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5 xl:gap-10 w-full mx-auto">
+        {quests.map((quest) => (
+          <ItemCard
+            key={quest.id}
+            id={quest.id}
+            type="quest"
+            backgroundImageUrl={quest.backgroundImageUrl}
+            iconUrl={quest.project.logoUrl}
+            projectName={quest.project.name}
+            title={quest.title}
+            description={quest.catchphrase}
+            points={quest.tasks.reduce((sum, task) => sum + task.points, 0)}
+          />
+        ))}
+      </div>
     </div>
   );
 }
