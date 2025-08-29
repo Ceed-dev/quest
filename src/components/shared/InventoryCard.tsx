@@ -9,7 +9,6 @@ type InventoryCardProps = {
   quantity: number;
 };
 
-// 背景SVG（既存のまま）
 const bgByRarity: Record<InventoryCardProps["rarity"], string> = {
   legendary: "/inventory/bg-legendary.svg",
   superRare: "/inventory/bg-superRare.svg",
@@ -17,7 +16,6 @@ const bgByRarity: Record<InventoryCardProps["rarity"], string> = {
   common: "/inventory/bg-common.svg",
 };
 
-// 追加：下ボーダー用カラー
 const borderColorByRarity: Record<InventoryCardProps["rarity"], string> = {
   common: "#DDDDDD",
   rare: "#E2FFA4",
@@ -46,19 +44,22 @@ export function InventoryCard({ rarity, quantity }: InventoryCardProps) {
 
       {/* 下ボーダー（レアリティカラー） */}
       <div
-        className="pointer-events-none absolute left-0 right-0 bottom-0 h-1"
+        className="pointer-events-none absolute left-0 right-0 bottom-0 h-[3px] md:h-1"
         style={{ backgroundColor: borderColorByRarity[rarity] }}
         aria-hidden
       />
 
       {/* オーバーレイ内容 */}
-      <div className="absolute inset-0 flex flex-col items-center justify-between p-5">
+      <div className="absolute inset-0 flex flex-col items-center justify-between p-4 md:p-5">
         {/* 数量 */}
         <div className="w-full flex justify-center">
           <p
-            className="text-center text-[64px] font-semibold leading-none
-               bg-clip-text text-transparent
-               drop-shadow-[0_4px_12px_rgba(0,0,0,0.35)]"
+            className="
+              text-center text-[40px] sm:text-[48px] md:text-[64px]
+              font-semibold leading-none select-none
+              bg-clip-text text-transparent
+              drop-shadow-[0_4px_12px_rgba(0,0,0,0.35)]
+            "
             style={{
               backgroundImage: `linear-gradient(to bottom, ${borderColorByRarity[rarity]}, #FFFFFF)`,
             }}
@@ -73,13 +74,20 @@ export function InventoryCard({ rarity, quantity }: InventoryCardProps) {
           alt={t("cubeAlt", { rarity: label })}
           width={160}
           height={160}
-          className="transition-transform duration-300 group-hover:-translate-y-1"
+          className="
+            w-[120px] h-[120px] sm:w-[140px] sm:h-[140px] md:w-[160px] md:h-[160px]
+            transition-transform duration-300 group-hover:-translate-y-1
+          "
         />
 
         {/* ラベル */}
         <div className="text-center">
           <p
-            className="font-semibold uppercase tracking-wide text-[24px] drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)]"
+            className="
+              font-semibold uppercase tracking-wide
+              text-[16px] sm:text-[18px] md:text-[24px]
+              drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)]
+            "
             style={{ color: borderColorByRarity[rarity] }}
           >
             {label}
