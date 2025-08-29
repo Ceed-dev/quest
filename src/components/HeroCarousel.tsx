@@ -50,10 +50,12 @@ export default function HeroCarousel({
 
   useEffect(() => {
     if (!api) return;
-    setCurrent(api.selectedScrollSnap());
 
-    const onSelect: () => void = () => setCurrent(api.selectedScrollSnap());
+    setCurrent(api.selectedScrollSnap());
+    const onSelect = () => setCurrent(api.selectedScrollSnap());
+
     api.on("select", onSelect);
+
     return () => {
       api.off("select", onSelect);
     };
@@ -76,17 +78,33 @@ export default function HeroCarousel({
 
             return (
               <CarouselItem key={q.id ?? i}>
-                {/* パネル本体（外側は padding なし） */}
+                {/* パネル本体 */}
                 <div className="relative overflow-hidden rounded-2xl bg-[#1C1C1C] text-white shadow-[0_6px_28px_rgba(0,0,0,0.28)]">
-                  {/* 内側に padding を移動 */}
-                  <div className="p-6 sm:p-8">
-                    <div className="relative z-10 grid grid-cols-1 md:grid-cols-[1fr_560px] gap-6 md:items-stretch">
-                      {/* 左：テキスト群（縦いっぱいに配置） */}
-                      <div className="flex flex-col gap-4 md:h-full md:justify-between">
+                  {/* 内側パディング（モバイル小さめ） */}
+                  <div className="p-4 sm:p-6 md:p-8">
+                    {/* 
+                      モバイル: 画像を先頭（order-1）、正方形
+                      デスクトップ: 左=テキスト 右=横長画像（既存踏襲）
+                    */}
+                    <div className="relative z-10 grid grid-cols-1 md:grid-cols-[1fr_560px] gap-4 md:gap-6 md:items-stretch">
+                      {/* 画像（モバイル先頭 / デスクトップ右） */}
+                      <div className="relative order-1 md:order-2 w-full aspect-square md:aspect-[1340/525] md:max-w-[700px] md:self-stretch">
+                        <Image
+                          src={q.backgroundImageUrl}
+                          alt=""
+                          fill
+                          priority={i === 0}
+                          className="object-cover md:object-contain"
+                          sizes="(min-width:1280px) 560px, (min-width:768px) 50vw, 92vw"
+                        />
+                      </div>
+
+                      {/* テキスト群（モバイルでは画像の下） */}
+                      <div className="order-2 md:order-1 flex flex-col gap-3 md:gap-4 md:h-full md:justify-between">
                         {/* 上段：アイコン＋プロジェクト名 */}
                         <div className="flex items-center gap-3">
                           {q.iconUrl && (
-                            <span className="inline-flex h-9 w-9 items-center justify-center overflow-hidden rounded-lg ring-1 ring-white/10 bg-black/30">
+                            <span className="inline-flex h-8 w-8 md:h-9 md:w-9 items-center justify-center overflow-hidden rounded-lg ring-1 ring-white/10 bg-black/30">
                               <Image
                                 src={q.iconUrl}
                                 alt=""
@@ -96,17 +114,19 @@ export default function HeroCarousel({
                               />
                             </span>
                           )}
-                          <span className="text-white text-[18px] font-semibold leading-none line-clamp-1">
+                          <span className="text-white text-[16px] md:text-[18px] font-semibold leading-none line-clamp-1">
                             {projectName}
                           </span>
                         </div>
 
-                        {/* タイトル */}
+                        {/* タイトル（モバイルは抑えめ） */}
                         <h2
                           className="
-                            text-[64px] leading-[1.05] font-extrabold tracking-tight
+                            text-[40px] md:text-[64px]
+                            leading-[1.1] md:leading-[1.05]
+                            font-extrabold tracking-tight
                             bg-gradient-to-r from-[#D5B77A] to-white bg-clip-text text-transparent
-                            line-clamp-2 min-h-[136px]
+                            line-clamp-2 md:min-h-[136px]
                           "
                           title={titleText}
                         >
@@ -114,29 +134,28 @@ export default function HeroCarousel({
                         </h2>
 
                         {/* サブテキスト */}
-                        <p className="text-[32px] text-[#D5B77A]">{descText}</p>
+                        <p className="text-[20px] md:text-[32px] text-[#D5B77A]">
+                          {descText}
+                        </p>
 
                         {/* ポイント & CTA（くっついた2ボタン） */}
                         <div className="relative inline-flex items-stretch">
                           {pointsLabel && (
                             <span
                               className="
-        relative flex h-[50px] items-center px-5
-        rounded-l-md text-[#1C1C1C] font-bold text-[24px] leading-none
-      "
+                                relative flex h-[44px] md:h-[50px] items-center px-4 md:px-5
+                                rounded-l-md text-[#1C1C1C] font-bold text-[18px] md:text-[24px] leading-none
+                              "
                               style={{
-                                // 左→右の金→白グラデ
                                 background:
                                   "linear-gradient(90deg, #D5B77A 0%, #FFFFFF 100%)",
                               }}
                             >
-                              {/* 上・左・下 へほんのりグロー（装飾） */}
                               <span
                                 aria-hidden
                                 className="pointer-events-none absolute -inset-y-2 -left-2 -z-10"
                                 style={{
                                   background:
-                                    // 左側／上側／下側へそれぞれ薄いラジアル
                                     "radial-gradient(80% 60% at 0% 50%, rgba(213,183,122,0.35) 0%, transparent 60%)," +
                                     "radial-gradient(80% 60% at 50% 0%, rgba(213,183,122,0.22) 0%, transparent 60%)," +
                                     "radial-gradient(80% 60% at 50% 100%, rgba(213,183,122,0.22) 0%, transparent 60%)",
@@ -150,26 +169,14 @@ export default function HeroCarousel({
                           <Link
                             href={`/quest/${q.id}`}
                             className="
-      flex h-[50px] items-center px-5
-      rounded-r-md bg-[#7F0019] text-white
-      font-bold text-[24px] leading-none hover:brightness-110
-    "
+                              flex h-[44px] md:h-[50px] items-center px-4 md:px-5
+                              rounded-r-md bg-[#7F0019] text-white
+                              font-bold text-[18px] md:text-[24px] leading-none hover:brightness-110
+                            "
                           >
                             Join the Quest
                           </Link>
                         </div>
-                      </div>
-
-                      {/* 右：メイン画像（最大 560〜700px） */}
-                      <div className="relative w-full md:max-w-[700px] aspect-[1340/525] md:self-stretch">
-                        <Image
-                          src={q.backgroundImageUrl}
-                          alt=""
-                          fill
-                          priority={i === 0}
-                          className="object-contain"
-                          sizes="(min-width:1280px) 560px, (min-width:768px) 50vw, 92vw"
-                        />
                       </div>
                     </div>
                   </div>

@@ -40,7 +40,7 @@ export default function HomePage() {
       <HeroCarousel items={items} className="mb-10" />
       <div className="w-full">
         {/* 見出し（左上） */}
-        <h1 className="mb-6 text-[40px] md:text-[48px] xl:text-[64px] font-extrabold leading-none tracking-wide uppercase text-[#7F0019]">
+        <h1 className="mb-6 text-[32px] md:text-[40px] xl:text-[64px] font-extrabold leading-none tracking-wide uppercase text-[#7F0019]">
           QUEST EXPLORATION
         </h1>
 
