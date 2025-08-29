@@ -116,9 +116,6 @@ function WalletPillButton({
         aria-haspopup="menu"
         aria-expanded={menuOpen}
       >
-        <span className="inline-grid place-items-center h-7 w-7 rounded-full bg-[#F0CD75]/60 overflow-hidden">
-          <span className="text-sm">🙂</span>
-        </span>
         <span className="text-[16px] tracking-wide">
           {short(account?.address)}
         </span>
@@ -362,12 +359,12 @@ export default function GlobalHeader() {
                   className={
                     active
                       ? [
-                          "text-[#D5B77A]",
-                          "relative",
-                          "after:content-[''] after:absolute",
-                          "after:left-[-8px] after:right-[-8px] after:-bottom-3 after:h-[18px]",
-                          "after:bg-[url('/nav-active-glow.svg')] after:bg-no-repeat after:bg-center after:bg-[length:100%_100%]",
-                        ].join(" ")
+                        "text-[#D5B77A]",
+                        "relative",
+                        "after:content-[''] after:absolute",
+                        "after:left-[-8px] after:right-[-8px] after:-bottom-3 after:h-[18px]",
+                        "after:bg-[url('/nav-active-glow.svg')] after:bg-no-repeat after:bg-center after:bg-[length:100%_100%]",
+                      ].join(" ")
                       : "text-[#BBA98D] transition-colors duration-200 hover:text-[#D5B77A]"
                   }
                   aria-current={active ? "page" : undefined}
@@ -418,7 +415,7 @@ export default function GlobalHeader() {
           <button
             ref={hiddenConnectBtnRef}
             className="hidden"
-            onClick={() => {}}
+            onClick={() => { }}
           >
             <WalletPillButton
               key={activeAccount?.address ?? "disconnected-mobile"}
@@ -475,11 +472,11 @@ export default function GlobalHeader() {
                 className={
                   active
                     ? [
-                        "text-[#D5B77A] text-[14px] font-medium relative",
-                        "after:content-[''] after:absolute",
-                        "after:left-[-6px] after:right-[-6px] after:-top-2 after:h-[14px]",
-                        "after:bg-[url('/nav-active-glow.svg')] after:bg-no-repeat after:bg-center after:bg-[length:100%_100%]",
-                      ].join(" ")
+                      "text-[#D5B77A] text-[14px] font-medium relative",
+                      "after:content-[''] after:absolute",
+                      "after:left-[-6px] after:right-[-6px] after:-top-2 after:h-[14px]",
+                      "after:bg-[url('/nav-active-glow.svg')] after:bg-no-repeat after:bg-center after:bg-[length:100%_100%]",
+                    ].join(" ")
                     : "text-[#BBA98D] text-[14px] font-medium hover:text-[#D5B77A] transition-colors"
                 }
                 aria-current={active ? "page" : undefined}
