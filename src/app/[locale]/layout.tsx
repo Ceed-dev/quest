@@ -1,97 +1,68 @@
-// ----------------------------------------------------
-// App Root Layout (per-locale)
-// ----------------------------------------------------
-// • Applies global fonts and dark theme
-// • Validates locale (Next-Intl)
-// • Wraps the app with shared providers
-// • Renders the fixed GlobalHeader + page content
-// ----------------------------------------------------
-
-import "../globals.css";
+/**
+ * Locale Layout (per /[locale] segment)
+ * ----------------------------------------------------
+ * - Re-mounts when switching locales (e.g., /en <-> /ja).
+ * - Holds ONLY locale-dependent UI & providers.
+ *   (NextIntl, header/footer, page frame, etc.)
+ * - Do NOT render <html>/<body> here — those live in src/app/layout.tsx.
+ */
 
 import type { ReactNode } from "react";
-import type { Metadata } from "next";
 
+// --- Next.js routing / i18n helpers
 import { notFound } from "next/navigation";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 
+// --- Fonts (scoped to this segment for className usage)
 import { Geist, Geist_Mono } from "next/font/google";
 
+// --- App UI
 import GlobalHeader from "@/components/GlobalHeader";
+import Footer from "@/components/shared/Footer";
 import { routing } from "@/i18n/routing";
 
-import { ThirdwebProvider } from "thirdweb/react";
-import { UserProvider } from "@/providers/user-provider";
-import { QuestsProvider } from "@/context/questsContext";
-
-import Footer from "@/components/shared/Footer";
-
-// ----------------------------------------------------
-// Fonts (variable)
-// ----------------------------------------------------
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
+// Configure variable fonts
+const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
 
-// ----------------------------------------------------
-// Static params for localized routes
-// ----------------------------------------------------
+// Generate static params for localized routes
 export function generateStaticParams() {
   return [{ locale: "en" }, { locale: "ja" }];
 }
 
-// ----------------------------------------------------
-// Page metadata
-// ----------------------------------------------------
-export const metadata: Metadata = {
-  title: "Quest App",
-  description: "Explore and complete quests",
-};
-
-type RootLayoutProps = {
-  children: ReactNode;
-  params: Promise<{ locale: string }>;
-};
-
-// ----------------------------------------------------
-// Root layout
-// ----------------------------------------------------
-// TODO: Once the Tailwind theme tokens are stable, replace
-//       hardcoded utility classes with semantic tokens.
-//       Ref: https://ui.shadcn.com/docs/dark-mode/next
-export default async function RootLayout({
+export default async function LocaleLayout({
   children,
   params,
-}: RootLayoutProps) {
-  // Validate the incoming locale
+}: {
+  children: ReactNode;
+  params: Promise<{ locale: string }>;
+}) {
+  // NOTE: Keep signature/behavior as-is (params is awaited).
   const { locale } = await params;
+
+  // Validate incoming locale against app routing config
   if (!hasLocale(routing.locales, locale)) notFound();
 
   return (
-    <html lang={locale}>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+    // Locale-aware provider (messages/locale can be wired here if needed)
+    <NextIntlClientProvider>
+      <div
+        className={[
+          geistSans.variable,
+          geistMono.variable,
+          "antialiased min-h-screen flex flex-col",
+        ].join(" ")}
       >
-        <NextIntlClientProvider>
-          <ThirdwebProvider>
-            <UserProvider>
-              <QuestsProvider>
-                <div className="min-h-screen flex flex-col">
-                  <GlobalHeader />
-                  <main className="flex-1 px-5 xl:px-16">{children}</main>
-                  <Footer />
-                </div>
-              </QuestsProvider>
-            </UserProvider>
-          </ThirdwebProvider>
-        </NextIntlClientProvider>
-      </body>
-    </html>
+        {/* Locale-specific chrome (safe to remount on switch) */}
+        <GlobalHeader />
+
+        <main className="flex-1 px-5 xl:px-16">{children}</main>
+
+        <Footer />
+      </div>
+    </NextIntlClientProvider>
   );
 }
