@@ -280,7 +280,12 @@ export default function GlobalHeader() {
         exact: true,
         protected: true,
       },
-      { label: "Ranking", href: "/ranking", exact: true, protected: true },
+      {
+        label: tSidebar("ranking"),
+        href: "/ranking",
+        exact: true,
+        protected: true,
+      },
     ],
     [tSidebar],
   );
