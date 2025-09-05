@@ -3,22 +3,20 @@ import "./globals.css";
 /**
  * Root Layout (App Router)
  * ----------------------------------------------------
- * - This is the ONE place that renders <html> / <body>.
- * - Providers placed here live across locale switches
- *   (i.e., they don't remount when switching /en <-> /ja).
- * - Keep global, non-locale state here (wallet/user/quests).
- *
- * Locale-specific UI (headers, footers, NextIntl, etc.)
- * should be placed in: src/app/[locale]/layout.tsx
+ * - This is the ONLY place that renders <html>/<body>. (Server Component)
+ * - Providers here persist across locale switches (/en <-> /ja),
+ *   so global state (wallet/user/quests) does not remount on language change.
+ * - Locale-specific UI (NextIntl, header/footer) is in src/app/[locale]/layout.tsx
  */
 
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 
-// --- Global, non-locale providers (persist across routing) ---
+// Global, non-locale providers (must persist)
 import { ThirdwebProvider } from "thirdweb/react";
 import { UserProvider } from "@/providers/user-provider";
 import { QuestsProvider } from "@/context/questsContext";
+import AutoConnect from "@/components/AutoConnect"; // client child to run useAutoConnect
 
 // Page metadata (can be overridden per route if needed)
 export const metadata: Metadata = {
@@ -28,11 +26,12 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    // Keep <html>/<body> ONLY in this root layout.
-    // lang is set to a default; per-locale concerns are handled in [locale]/layout.
+    // lang is a default; actual copy is controlled by NextIntl in [locale]/layout.
     <html lang="en">
       <body>
         <ThirdwebProvider>
+          {/* Restore the previously connected wallet after reload */}
+          <AutoConnect />
           <UserProvider>
             <QuestsProvider>{children}</QuestsProvider>
           </UserProvider>
