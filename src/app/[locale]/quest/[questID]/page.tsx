@@ -1,16 +1,31 @@
+// -----------------------------------------------------------------------------
+// QuestDetailPage
+// - Displays quest detail with tasks and description.
+// - "FOR YOU" section now uses pickQuestImageUrl(q, "square") for ItemCard.
+// -----------------------------------------------------------------------------
+
 "use client";
 
-import { useQuestsContext } from "@/context/questsContext";
-import { notFound, useParams } from "next/navigation";
+import React from "react";
 import Image from "next/image";
-import { TaskItem } from "@/components/TaskItem";
+import { notFound, useParams } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { getLText } from "@/lib/i18n-data";
-import { SquareArrowOutUpRight } from "lucide-react";
-import React from "react";
+import { useQuestsContext } from "@/context/questsContext";
+import { TaskItem } from "@/components/TaskItem";
 import { ItemCard } from "@/components/shared/ItemCard";
 import { Link } from "@/i18n/navigation";
-import { ArrowDownCircle } from "lucide-react";
+import { SquareArrowOutUpRight, ArrowDownCircle } from "lucide-react";
+import type { Quest } from "@/types/quest";
+
+/** Pick an image URL by usage with safe fallbacks */
+function pickQuestImageUrl(quest: Quest, usage: "square" | "wide"): string {
+  const imgs = quest.backgroundImages ?? [];
+  const exact = imgs.find((i) => i.usage === usage)?.url;
+  if (exact) return exact;
+  if (imgs[0]?.url) return imgs[0].url;
+  return quest.project.logoUrl || "";
+}
 
 export default function QuestDetailPage() {
   const { questID } = useParams() as { questID: string };
@@ -19,10 +34,12 @@ export default function QuestDetailPage() {
   const locale = useLocale() as "en" | "ja";
 
   const [copied, setCopied] = React.useState(false);
+
   const handleShare = React.useCallback(async () => {
     try {
       await navigator.clipboard.writeText(window.location.href);
     } catch {
+      // fallback: execCommand
       const dummy = document.createElement("input");
       dummy.value = window.location.href;
       document.body.appendChild(dummy);
@@ -33,7 +50,6 @@ export default function QuestDetailPage() {
     setCopied(true);
     setTimeout(() => setCopied(false), 1500);
   }, []);
-  // ▲ ここまで
 
   if (isLoading) {
     return <p className="text-center text-gray-500 py-10">{t("loading")}</p>;
@@ -47,9 +63,9 @@ export default function QuestDetailPage() {
 
   return (
     <div className="w-full mx-auto">
-      {/* ====== TOP: Quest summary card (full width) ====== */}
+      {/* ====== TOP: Quest summary ====== */}
       <section className="w-full rounded-2xl bg-[#1C1C1C] text-white shadow-[0_6px_28px_rgba(0,0,0,0.28)] p-6 sm:p-8 md:p-10">
-        {/* row: project (icon + name) + share */}
+        {/* Project row */}
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-3 sm:gap-4">
             <Image
@@ -75,44 +91,24 @@ export default function QuestDetailPage() {
           </button>
         </div>
 
-        {/* title */}
-        <h1
-          className="
-    mt-5 sm:mt-6
-    font-extrabold tracking-tight leading-[1.08]
-    text-transparent bg-clip-text
-    bg-gradient-to-r from-[#D5B77A] to-white
-    text-[28px] sm:text-[40px] md:text-[52px] xl:text-[64px]
-  "
-        >
+        {/* Title */}
+        <h1 className="mt-5 sm:mt-6 font-extrabold tracking-tight leading-[1.08] text-transparent bg-clip-text bg-gradient-to-r from-[#D5B77A] to-white text-[28px] sm:text-[40px] md:text-[52px] xl:text-[64px]">
           {getLText(quest.title, locale)}
         </h1>
 
-        {/* catchphrase */}
-        <p
-          className="
-            mt-3 sm:mt-4
-            text-[#D5B77A]
-            text-[18px] sm:text-[22px] lg:text-[32px]
-          "
-        >
+        {/* Catchphrase */}
+        <p className="mt-3 sm:mt-4 text-[#D5B77A] text-[18px] sm:text-[22px] lg:text-[32px]">
           {getLText(quest.catchphrase, locale)}
         </p>
 
-        {/* total points pill */}
+        {/* Total points pill */}
         <div className="mt-5">
           <div className="relative inline-flex">
-            {/* 背後のグラデ&光彩 */}
             <span
               aria-hidden="true"
               className="absolute -inset-1 rounded-lg bg-[#D5B77A] opacity-50 blur-[3px]"
             />
-            {/* 本体の白ピル */}
-            <span
-              className="relative inline-flex items-center rounded-lg bg-gradient-to-r from-[#D5B77A] to-white text-[#1C1C1C]
-                 px-4 py-1.5 text-[24px] font-bold
-                 ring-1 ring-black/10 shadow-[0_6px_28px_rgba(0,0,0,0.28)]"
-            >
+            <span className="relative inline-flex items-center rounded-lg bg-gradient-to-r from-[#D5B77A] to-white text-[#1C1C1C] px-4 py-1.5 text-[24px] font-bold ring-1 ring-black/10 shadow-[0_6px_28px_rgba(0,0,0,0.28)]">
               {t("totalPoints")}: {totalPoints}
             </span>
           </div>
@@ -146,7 +142,7 @@ export default function QuestDetailPage() {
               key={q.id}
               id={q.id}
               type="quest"
-              backgroundImageUrl={q.backgroundImageUrl}
+              backgroundImageUrl={pickQuestImageUrl(q, "square")}
               iconUrl={q.project.logoUrl}
               projectName={q.project.name}
               title={getLText(q.title, locale)}

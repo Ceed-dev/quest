@@ -1,3 +1,7 @@
+// -----------------------------------------------------------------------------
+// QuestsContext: provides a list of quests and loading/error states to children.
+// -----------------------------------------------------------------------------
+
 "use client";
 
 import React, {
@@ -7,27 +11,28 @@ import React, {
   useState,
   ReactNode,
 } from "react";
-import { Quest } from "@/types/quest";
+
+import type { Quest } from "@/types/quest";
 import { fetchQuests } from "@/lib/fetchQuests";
 
-// Define the shape of the context
+/** Shape of the Quests context */
 type QuestsContextType = {
   quests: Quest[]; // List of all quests
   isLoading: boolean; // Fetching status
   error: Error | null; // Any fetching error
 };
 
-// Create the context
+/** Create the context (internal) */
 const QuestsContext = createContext<QuestsContextType | undefined>(undefined);
 
-// Provider component
+/** Provider component */
 export const QuestsProvider = ({ children }: { children: ReactNode }) => {
   const [quests, setQuests] = useState<Quest[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    const load = async () => {
+    const loadQuests = async () => {
       try {
         const data = await fetchQuests();
         setQuests(data);
@@ -38,7 +43,7 @@ export const QuestsProvider = ({ children }: { children: ReactNode }) => {
       }
     };
 
-    load();
+    loadQuests();
   }, []);
 
   return (
@@ -48,11 +53,11 @@ export const QuestsProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-// Hook for consuming the context
+/** Hook for consuming the context */
 export const useQuestsContext = (): QuestsContextType => {
-  const context = useContext(QuestsContext);
-  if (!context) {
+  const ctx = useContext(QuestsContext);
+  if (!ctx) {
     throw new Error("useQuestsContext must be used within a QuestsProvider");
   }
-  return context;
+  return ctx;
 };

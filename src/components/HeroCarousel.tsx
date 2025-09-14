@@ -1,42 +1,49 @@
+// -----------------------------------------------------------------------------
+// HeroCarousel
+// - Receives items (HeroQuest[]) and renders a looping carousel
+// - No behavior change from your original version; only ordering/comments cleanup
+// -----------------------------------------------------------------------------
+
 "use client";
 
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+
+import { useLocale } from "next-intl";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+
 import { cn } from "@/lib/utils";
+import { getLText } from "@/lib/i18n-data";
+import type { LocalizedText } from "@/types/i18n";
 import type { CarouselApi } from "@/components/ui/carousel";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 
-import { useLocale } from "next-intl";
-import { getLText } from "@/lib/i18n-data";
-import type { LocalizedText } from "@/types/i18n";
-
-/* =========================
-   データ仕様（ItemCard と整合）
-   ========================= */
+/* -----------------------------------------------------------------------------
+ * Types
+ * ---------------------------------------------------------------------------*/
 export type HeroQuest = {
   id: string;
-  backgroundImageUrl: string; // 右側の大きなイメージ
-  iconUrl?: string; // 左上の小アイコン（任意）
-  projectName: LocalizedText | string;
-  title: LocalizedText;
-  description: LocalizedText;
-  points?: number;
+  backgroundImageUrl: string; // Right-side large image
+  iconUrl?: string; // Small icon (optional)
+  projectName: LocalizedText | string; // Project display name
+  title: LocalizedText; // Large heading
+  description: LocalizedText; // Sub heading
+  points?: number; // Optional point label
 };
 
-// LocalizedText | string を表示用に取り出す
+/** Normalize LocalizedText | string to a display string */
 function getText(value: LocalizedText | string, locale: "en" | "ja") {
   return typeof value === "string" ? value : getLText(value, locale);
 }
 
-/* =========================
-   コンポーネント
-   ========================= */
+/* -----------------------------------------------------------------------------
+ * Component
+ * ---------------------------------------------------------------------------*/
 export default function HeroCarousel({
   items,
   className,
@@ -47,10 +54,12 @@ export default function HeroCarousel({
   const [api, setApi] = useState<CarouselApi | null>(null);
   const [current, setCurrent] = useState(0);
   const locale = (useLocale() as "en" | "ja") ?? "en";
+  const total = items.length;
 
   useEffect(() => {
-    if (!api) return;
+    if (!api) return; // or: return undefined;
 
+    // Initialize current index and subscribe to selection changes
     setCurrent(api.selectedScrollSnap());
     const onSelect = () => setCurrent(api.selectedScrollSnap());
 
@@ -60,8 +69,6 @@ export default function HeroCarousel({
       api.off("select", onSelect);
     };
   }, [api]);
-
-  const total = items.length;
 
   return (
     <div className={cn("w-full", className)}>
@@ -78,16 +85,16 @@ export default function HeroCarousel({
 
             return (
               <CarouselItem key={q.id ?? i}>
-                {/* パネル本体 */}
+                {/* Panel */}
                 <div className="relative overflow-hidden rounded-2xl bg-[#1C1C1C] text-white shadow-[0_6px_28px_rgba(0,0,0,0.28)]">
-                  {/* 内側パディング（モバイル小さめ） */}
+                  {/* Inner padding */}
                   <div className="p-4 sm:p-6 md:p-8">
-                    {/* 
-                      モバイル: 画像を先頭（order-1）、正方形
-                      デスクトップ: 左=テキスト 右=横長画像（既存踏襲）
+                    {/* Layout:
+                       - Mobile: image first (square)
+                       - Desktop: left=text, right=wide image
                     */}
                     <div className="relative z-10 grid grid-cols-1 md:grid-cols-[1fr_560px] gap-4 md:gap-6 md:items-stretch">
-                      {/* 画像（モバイル先頭 / デスクトップ右） */}
+                      {/* Image (mobile first / desktop right) */}
                       <div className="relative order-1 md:order-2 w-full aspect-square md:aspect-[1340/525] md:max-w-[700px] md:self-stretch">
                         <Image
                           src={q.backgroundImageUrl}
@@ -99,9 +106,9 @@ export default function HeroCarousel({
                         />
                       </div>
 
-                      {/* テキスト群（モバイルでは画像の下） */}
+                      {/* Text block */}
                       <div className="order-2 md:order-1 flex flex-col gap-3 md:gap-4 md:h-full md:justify-between">
-                        {/* 上段：アイコン＋プロジェクト名 */}
+                        {/* Top row: icon + project name */}
                         <div className="flex items-center gap-3">
                           {q.iconUrl && (
                             <span className="inline-flex h-8 w-8 md:h-9 md:w-9 items-center justify-center overflow-hidden rounded-lg ring-1 ring-white/10 bg-black/30">
@@ -119,7 +126,7 @@ export default function HeroCarousel({
                           </span>
                         </div>
 
-                        {/* タイトル（モバイルは抑えめ） */}
+                        {/* Title */}
                         <h2
                           className="
                             text-[40px] md:text-[64px]
@@ -133,12 +140,12 @@ export default function HeroCarousel({
                           {titleText}
                         </h2>
 
-                        {/* サブテキスト */}
+                        {/* Description */}
                         <p className="text-[20px] md:text-[32px] text-[#D5B77A]">
                           {descText}
                         </p>
 
-                        {/* ポイント & CTA（くっついた2ボタン） */}
+                        {/* Points + CTA */}
                         <div className="relative inline-flex items-stretch">
                           {pointsLabel && (
                             <span
@@ -186,7 +193,7 @@ export default function HeroCarousel({
           })}
         </CarouselContent>
 
-        {/* ▼ 下中央ナビ（Prev・ドット×5・Next） */}
+        {/* Bottom controls: Prev / dots(<=5) / Next */}
         <div className="mt-3 flex items-center justify-center gap-4">
           <button
             type="button"

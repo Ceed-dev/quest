@@ -1,3 +1,10 @@
+// -----------------------------------------------------------------------------
+// ItemCard
+// - Renders a quest/game card with project info, square image, and CTA.
+// - Props API unchanged: backgroundImageUrl is still a string (provided upstream).
+// - Layout matches Figma spec for mobile/desktop.
+// -----------------------------------------------------------------------------
+
 "use client";
 
 import React from "react";
@@ -7,23 +14,28 @@ import { useLocale, useTranslations } from "next-intl";
 import { getLText } from "@/lib/i18n-data";
 import type { LocalizedText } from "@/types/i18n";
 
-// Props
+/* -----------------------------------------------------------------------------
+ * Props
+ * ---------------------------------------------------------------------------*/
 type ItemCardProps = {
   id: string;
   type: "quest" | "game";
-  backgroundImageUrl: string;
-  iconUrl?: string;
-  projectName: LocalizedText | string;
-  title: LocalizedText;
-  description: LocalizedText;
-  points?: number;
+  backgroundImageUrl: string; // Square image (already picked upstream)
+  iconUrl?: string; // Optional project icon
+  projectName: LocalizedText | string; // Project display name
+  title: LocalizedText; // Card title
+  description: LocalizedText; // Short description / catchphrase
+  points?: number; // Reward points (quest only)
 };
 
-// LocalizedText | string を安全に取り出す
+/** Normalize LocalizedText | string to a display string */
 function getText(value: LocalizedText | string, locale: "en" | "ja") {
   return typeof value === "string" ? value : getLText(value, locale);
 }
 
+/* -----------------------------------------------------------------------------
+ * Component
+ * ---------------------------------------------------------------------------*/
 export function ItemCard({
   id,
   type,
@@ -51,9 +63,9 @@ export function ItemCard({
         ].join(" ")}
       >
         <div className="p-4 md:p-4 lg:p-4">
-          {/* ── 上段：アイコン＋プロジェクト名（モバイル/PC 共通） ── */}
+          {/* Top row: icon + project name */}
           <div className="flex items-center gap-3">
-            {iconUrl ? (
+            {iconUrl && (
               <span className="inline-flex h-8 w-8 md:h-9 md:w-9 items-center justify-center overflow-hidden rounded-lg ring-1 ring-white/10 bg-black/30">
                 <Image
                   src={iconUrl}
@@ -63,16 +75,16 @@ export function ItemCard({
                   className="h-full w-full object-cover"
                 />
               </span>
-            ) : null}
+            )}
             <span className="text-white text-[16px] md:text-[18px] font-semibold leading-none line-clamp-1">
               {projectNameText}
             </span>
           </div>
 
-          {/* ── 中段：モバイルは左右2カラム / PCは従来どおり縦レイアウト ── */}
+          {/* Middle block: text + image (responsive layout) */}
           <div className="mt-3 grid grid-cols-2 gap-3 md:grid-cols-1">
-            {/* 左：テキスト群（モバイル左 / PCでは画像の下） */}
-            <div className="order-1 md:order-2 flex flex-col gap-2 md:gap-2">
+            {/* Left (mobile) / below (desktop): text group */}
+            <div className="order-1 md:order-2 flex flex-col gap-2">
               <h3
                 className="
                   text-[#D5B77A]
@@ -92,7 +104,7 @@ export function ItemCard({
                 {descText}
               </p>
 
-              {/* Points pill */}
+              {/* Points pill (quests only) */}
               {type === "quest" && typeof points === "number" && (
                 <span
                   className="
@@ -107,7 +119,7 @@ export function ItemCard({
                 </span>
               )}
 
-              {/* CTA（モバイルは列幅いっぱい / PCはFigmaサイズ） */}
+              {/* CTA button */}
               <button
                 className={[
                   "mt-1 md:mt-2 inline-flex items-center justify-center",
@@ -121,9 +133,8 @@ export function ItemCard({
               </button>
             </div>
 
-            {/* 右：正方形画像（モバイル右 / PCではタイトル群の上） */}
+            {/* Right (mobile) / above (desktop): square image */}
             <div className="order-2 md:order-1">
-              {/* PCでは従来通り：先に画像、下にテキストへ切り替え */}
               <div className="relative aspect-square w-full overflow-hidden rounded-xl ring-1 ring-white/10 bg-black/30 md:mt-1">
                 <Image
                   src={backgroundImageUrl}
