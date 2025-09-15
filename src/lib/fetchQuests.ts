@@ -1,3 +1,9 @@
+// -----------------------------------------------------------------------------
+// Fetch quests from Firestore (descending by createdAt, max 20).
+// Backward compatible: prefers `backgroundImages` and falls back to legacy
+// `backgroundImageUrl` by wrapping it as a "wide" usage image.
+// -----------------------------------------------------------------------------
+
 import {
   collection,
   getDocs,
@@ -10,12 +16,14 @@ import {
 // Firebase instance
 import { db } from "@/lib/firebase";
 
+// i18n helpers
 import type { LocalizedText } from "@/types/i18n";
 import { coerceLText } from "@/lib/i18n-data";
 
-// Types
-import type { Quest, QuestTask } from "@/types/quest";
+// Domain types
+import type { Quest, QuestTask, QuestImage } from "@/types/quest";
 
+/** Firestore document shape (kept backward compatible) */
 type FirestoreQuest = {
   project: {
     name: LocalizedText;
@@ -24,7 +32,12 @@ type FirestoreQuest = {
   title: LocalizedText;
   description?: LocalizedText;
   catchphrase?: LocalizedText;
-  backgroundImageUrl: string;
+
+  /** New field (preferred) */
+  backgroundImages?: QuestImage[];
+  /** Legacy field (fallback) */
+  backgroundImageUrl?: string;
+
   tasks: {
     id: string;
     label: LocalizedText;
@@ -34,6 +47,7 @@ type FirestoreQuest = {
       url: string;
     };
   }[];
+
   timestamps: {
     createdAt: Timestamp;
     updatedAt: Timestamp;
@@ -42,7 +56,9 @@ type FirestoreQuest = {
 
 /**
  * Fetch quests from Firestore
- * Sorted by creation date in descending order
+ * - Sorted by creation date (desc)
+ * - Limited to 20 docs
+ * - Returns domain `Quest[]`
  */
 export const fetchQuests = async (): Promise<Quest[]> => {
   const q = query(
@@ -56,7 +72,27 @@ export const fetchQuests = async (): Promise<Quest[]> => {
   return snapshot.docs.map((doc) => {
     const data = doc.data() as FirestoreQuest;
 
-    return {
+    // Prefer array-based field; fallback to legacy single URL as "wide"
+    const backgroundImages: QuestImage[] =
+      data.backgroundImages && data.backgroundImages.length > 0
+        ? data.backgroundImages
+        : data.backgroundImageUrl
+          ? [{ url: data.backgroundImageUrl, usage: "wide" }]
+          : [];
+
+    const tasks: QuestTask[] = data.tasks.map((task) => ({
+      id: task.id,
+      label: coerceLText(task.label),
+      points: task.points,
+      actionButton: task.actionButton
+        ? {
+            label: coerceLText(task.actionButton.label),
+            url: task.actionButton.url,
+          }
+        : undefined,
+    }));
+
+    const quest: Quest = {
       id: doc.id,
       project: {
         name: coerceLText(data.project?.name),
@@ -65,22 +101,14 @@ export const fetchQuests = async (): Promise<Quest[]> => {
       title: coerceLText(data.title),
       description: coerceLText(data.description ?? ""),
       catchphrase: coerceLText(data.catchphrase ?? ""),
-      backgroundImageUrl: data.backgroundImageUrl,
-      tasks: data.tasks.map((task) => ({
-        id: task.id,
-        label: coerceLText(task.label),
-        points: task.points,
-        actionButton: task.actionButton
-          ? {
-              label: coerceLText(task.actionButton.label),
-              url: task.actionButton.url,
-            }
-          : undefined,
-      })) as QuestTask[],
+      backgroundImages, // ← unified field
+      tasks,
       timestamps: {
         createdAt: data.timestamps.createdAt.toDate(),
         updatedAt: data.timestamps.updatedAt.toDate(),
       },
-    } as Quest;
+    };
+
+    return quest;
   });
 };
