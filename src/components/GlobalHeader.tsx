@@ -50,6 +50,7 @@ import type { Wallet } from "thirdweb/wallets";
  * ---------------------------------------------------------------------------*/
 const UI = {
   headerHeight: 87, // must match the top spacer below
+  headerVPad: 18.5, // header vertical padding (py-[18.5px])
   maxWidth: 1000,
   shellBg: "#2B2B2B",
   mobileBottomBarH: 56, // must match the bottom spacer height
@@ -328,7 +329,10 @@ export default function GlobalHeader() {
         aria-label="Global header"
       >
         <div
-          className="flex h-[50px] w-full items-center justify-between rounded-md px-4 lg:max-w-[1000px]"
+          className={
+            `relative flex h-[50px] w-full items-center justify-between px-4 lg:max-w-[1000px] ` +
+            (open ? `rounded-t-md rounded-b-none lg:rounded-md` : `rounded-md`)
+          }
           style={{ backgroundColor: UI.shellBg, maxWidth: UI.maxWidth }}
         >
           {/* Left: Logo */}
@@ -427,9 +431,9 @@ export default function GlobalHeader() {
             variants={barVariants}
             transition={{ duration: 0.18, ease: "easeOut" }}
             className="fixed inset-x-0 z-[60] lg:hidden"
-            style={{ top: UI.headerHeight - 1 }}
+            style={{ top: UI.headerHeight - UI.headerVPad }}
           >
-            <div className="mx-5 rounded-b-md rounded-t-none bg-[#2B2B2B] px-4 pb-3 pt-2 shadow-lg">
+            <div className="mx-5 -mt-px rounded-b-md rounded-t-none bg-[#2B2B2B] px-4 pb-3 pt-2 shadow-lg">
               <MobileConnectButton
                 client={client}
                 wallets={wallets}
