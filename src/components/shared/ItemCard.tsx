@@ -1,11 +1,18 @@
-// -----------------------------------------------------------------------------
-// ItemCard
-// - Renders a quest/game card with project info, square image, and CTA.
-// - Props API unchanged: backgroundImageUrl is still a string (provided upstream).
-// - Layout matches Figma spec for mobile/desktop.
-// -----------------------------------------------------------------------------
-
 "use client";
+
+/**
+ * ItemCard
+ * ---------------------------------------------------------------------------
+ * - Full-card link to /{type}/{id}.
+ * - Shows project icon/name, title, description, points (for quest), and a
+ *   visual CTA pill. The CTA is purely visual because the whole card is a link.
+ *
+ * Accessibility / Semantics:
+ * - Avoid nested interactive elements: do NOT put <button> inside <Link>.
+ *   Use a non-interactive element styled as a button (e.g. <span>).
+ * - The entire card is the hit target; CTA is decorative text.
+ * ---------------------------------------------------------------------------
+ */
 
 import React from "react";
 import Image from "next/image";
@@ -54,7 +61,15 @@ export function ItemCard({
   const descText = getLText(description, locale);
 
   return (
-    <Link href={`/${type}/${id}`} className="group block">
+    <Link
+      href={`/${type}/${id}`}
+      className="group block"
+      aria-label={
+        type === "quest"
+          ? t("aria.openQuest", { title: titleText })
+          : t("aria.openGame", { title: titleText })
+      }
+    >
       <div
         className={[
           "relative w-full rounded-2xl overflow-hidden",
@@ -119,18 +134,19 @@ export function ItemCard({
                 </span>
               )}
 
-              {/* CTA button */}
-              <button
+              {/* Visual CTA (non-interactive; whole card is the link) */}
+              <span
+                aria-hidden="true"
                 className={[
                   "mt-1 md:mt-2 inline-flex items-center justify-center",
                   "h-[46px] md:h-[50px] w-full md:w-[197px] rounded-[10px]",
                   "bg-white text-[#232323] font-bold text-[20px] md:text-[24px]",
                   "transition-transform duration-150",
-                  "group-hover:-translate-y-0.5 active:translate-y-0",
+                  "group-hover:-translate-y-0.5",
                 ].join(" ")}
               >
                 {type === "quest" ? t("joinQuest") : t("viewGame")}
-              </button>
+              </span>
             </div>
 
             {/* Right (mobile) / above (desktop): square image */}
