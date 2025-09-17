@@ -39,12 +39,13 @@ import {
  * ---------------------------------------------------------------------------*/
 export type HeroQuest = {
   id: string;
-  backgroundImageUrl: string; // Right-side large image
-  iconUrl?: string; // Optional small icon
-  projectName: LocalizedText | string; // Project display name
-  title: LocalizedText; // Large heading
-  description: LocalizedText; // Subheading
-  points?: number; // Optional points label
+  wideImageUrl: string;
+  squareImageUrl: string;
+  iconUrl?: string;
+  projectName: LocalizedText | string;
+  title: LocalizedText;
+  description: LocalizedText;
+  points?: number;
 };
 
 /** Normalize LocalizedText|string to display string */
@@ -101,14 +102,28 @@ export default function HeroCarousel({
                     <div className="relative z-10 grid grid-cols-1 md:grid-cols-[1fr_560px] gap-4 md:gap-6 md:items-stretch">
                       {/* --- Image (mobile top / desktop right) --- */}
                       <div className="relative order-1 md:order-2 w-full aspect-square md:aspect-[1340/525] md:max-w-[700px] md:self-stretch">
-                        <Image
-                          src={q.backgroundImageUrl}
-                          alt=""
-                          fill
-                          priority={i === 0}
-                          className="object-cover md:object-contain"
-                          sizes="(min-width:1280px) 560px, (min-width:768px) 50vw, 92vw"
-                        />
+                        {/* Mobile: square */}
+                        <div className="md:hidden relative w-full h-full">
+                          <Image
+                            src={q.squareImageUrl}
+                            alt=""
+                            fill
+                            priority={i === 0}
+                            className="object-cover"
+                            sizes="92vw"
+                          />
+                        </div>
+                        {/* Desktop: wide */}
+                        <div className="hidden md:block relative w-full h-full">
+                          <Image
+                            src={q.wideImageUrl}
+                            alt=""
+                            fill
+                            priority={i === 0}
+                            className="object-contain"
+                            sizes="(min-width:1280px) 560px, (min-width:768px) 50vw"
+                          />
+                        </div>
                       </div>
 
                       {/* --- Text block --- */}
@@ -211,10 +226,10 @@ export default function HeroCarousel({
             <ChevronLeft className="mx-auto h-6 w-6" strokeWidth={3} />
           </button>
 
-          {/* Dots (max 5) */}
+          {/* Dots (show all) */}
           <div className="flex items-center gap-3">
-            {Array.from({ length: Math.min(5, total) }).map((_, idx) => {
-              const isActive = current % Math.min(5, total) === idx;
+            {Array.from({ length: total }).map((_, idx) => {
+              const isActive = current === idx;
               return (
                 <span
                   key={idx}

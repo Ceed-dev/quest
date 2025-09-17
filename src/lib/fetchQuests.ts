@@ -40,6 +40,11 @@ type FirestoreQuest = {
     };
   }[];
 
+  /** Quest-specific settings stored in Firestore */
+  settings: {
+    heroCarouselOrder: number | null;
+  };
+
   timestamps: {
     createdAt: Timestamp;
     updatedAt: Timestamp;
@@ -71,9 +76,9 @@ export const fetchQuests = async (): Promise<Quest[]> => {
       points: task.points,
       actionButton: task.actionButton
         ? {
-            label: coerceLText(task.actionButton.label),
-            url: task.actionButton.url,
-          }
+          label: coerceLText(task.actionButton.label),
+          url: task.actionButton.url,
+        }
         : undefined,
     }));
 
@@ -81,14 +86,17 @@ export const fetchQuests = async (): Promise<Quest[]> => {
     const quest: Quest = {
       id: doc.id,
       project: {
-        name: coerceLText(data.project?.name),
-        logoUrl: data.project?.logoUrl,
+        name: coerceLText(data.project.name),
+        logoUrl: data.project.logoUrl,
       },
       title: coerceLText(data.title),
       description: coerceLText(data.description ?? ""),
       catchphrase: coerceLText(data.catchphrase ?? ""),
       backgroundImages: data.backgroundImages,
       tasks,
+      settings: {
+        heroCarouselOrder: data.settings.heroCarouselOrder,
+      },
       timestamps: {
         createdAt: data.timestamps.createdAt.toDate(),
         updatedAt: data.timestamps.updatedAt.toDate(),

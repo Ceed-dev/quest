@@ -27,7 +27,7 @@ export type QuestTask = {
 };
 
 /** ----------------------------------------------------------------
- * Main Quest type (MVP)
+ * Main Quest type
  * ----------------------------------------------------------------*/
 export type Quest = {
   id: string; // Unique quest ID
@@ -46,6 +46,12 @@ export type Quest = {
 
   /** List of tasks associated with this quest */
   tasks: QuestTask[];
+
+  /** Quest-specific settings (internal use, not user-facing) */
+  settings: {
+    /** Order in HeroCarousel (null = not shown, 1..N = display order) */
+    heroCarouselOrder: number | null;
+  };
 
   /** Record timestamps */
   timestamps: {

@@ -27,16 +27,21 @@ export default function HomePage() {
   const { quests, isLoading, error } = useQuestsContext();
   const t = useTranslations("home");
 
-  // Prepare items for HeroCarousel (use wide image)
-  const items: HeroQuest[] = quests.slice(0, 5).map((q) => ({
-    id: q.id,
-    backgroundImageUrl: pickQuestImageUrl(q, "wide"),
-    iconUrl: q.project.logoUrl,
-    projectName: q.project.name,
-    title: q.title,
-    description: q.catchphrase,
-    points: q.tasks.reduce((s, t) => s + t.points, 0),
-  }));
+  const items: HeroQuest[] = quests
+    .filter((q) => q.settings.heroCarouselOrder !== null)
+    .sort(
+      (a, b) => a.settings.heroCarouselOrder! - b.settings.heroCarouselOrder!,
+    )
+    .map((q) => ({
+      id: q.id,
+      wideImageUrl: pickQuestImageUrl(q, "wide"),
+      squareImageUrl: pickQuestImageUrl(q, "square"),
+      iconUrl: q.project.logoUrl,
+      projectName: q.project.name,
+      title: q.title,
+      description: q.catchphrase,
+      points: q.tasks.reduce((s, t) => s + t.points, 0),
+    }));
 
   if (isLoading) {
     return <p className="text-center text-gray-500 py-10">{t("loading")}</p>;
