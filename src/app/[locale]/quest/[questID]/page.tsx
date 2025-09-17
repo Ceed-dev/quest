@@ -135,6 +135,37 @@ export default function QuestDetailPage() {
         {getLText(quest.description, locale)}
       </p>
 
+      {/* === Responsive promo image directly under Description === */}
+      <div className="mt-4">
+        {/* Mobile: square image (full width, no crop) */}
+        <div className="md:hidden">
+          <div className="overflow-hidden rounded-xl">
+            <Image
+              src={pickQuestImageUrl(quest, "square")}
+              alt={getLText(quest.title, locale)}
+              width={1000}
+              height={1000}
+              className="w-full h-auto"
+              sizes="(max-width: 768px) 92vw, 0px"
+            />
+          </div>
+        </div>
+
+        {/* Desktop: wide image (full width, no crop) */}
+        <div className="hidden md:block">
+          <div className="overflow-hidden rounded-xl">
+            <Image
+              src={pickQuestImageUrl(quest, "wide")}
+              alt={getLText(quest.title, locale)}
+              width={1600}
+              height={700}
+              className="w-full h-auto"
+              sizes="(min-width:1280px) 1120px, (min-width:768px) 80vw, 0px"
+            />
+          </div>
+        </div>
+      </div>
+
       {/* ===== For you ===== */}
       <section className="mt-12">
         <h3 className="mb-4 text-[32px] font-extrabold text-[#7F0019]">
