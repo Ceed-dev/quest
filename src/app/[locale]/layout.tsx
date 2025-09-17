@@ -24,6 +24,12 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+// ---- Type guard to avoid `any` and satisfy union literal types ----
+type AppLocale = (typeof routing.locales)[number];
+function isAppLocale(x: string): x is AppLocale {
+  return (routing.locales as readonly string[]).includes(x);
+}
+
 // Generate static params for localized routes (SSG)
 export function generateStaticParams() {
   return [{ locale: "en" }, { locale: "ja" }];
@@ -38,8 +44,8 @@ export default function LocaleLayout({
 }) {
   const { locale } = params;
 
-  // Validate locale against routing config
-  if (!routing.locales.includes(locale as any)) notFound();
+  // Validate locale against routing config (no `any` cast)
+  if (!isAppLocale(locale)) notFound();
 
   return (
     <NextIntlClientProvider locale={locale}>
