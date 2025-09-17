@@ -1,7 +1,12 @@
 // -----------------------------------------------------------------------------
 // QuestDetailPage
-// - Displays quest detail with tasks and description.
-// - "FOR YOU" section now uses pickQuestImageUrl(q, "square") for ItemCard.
+// -----------------------------------------------------------------------------
+// - Displays a quest detail page with summary, tasks, description, and a
+//   "FOR YOU" section with related quests.
+// - Uses pickQuestImageUrl(q, "square"|"wide") to select the correct image
+//   variant with safe fallbacks.
+// - NOTE: Pass LocalizedText values (not strings) to ItemCard so it can handle
+//   localization internally.
 // -----------------------------------------------------------------------------
 
 "use client";
@@ -18,7 +23,7 @@ import { Link } from "@/i18n/navigation";
 import { SquareArrowOutUpRight, ArrowDownCircle } from "lucide-react";
 import type { Quest } from "@/types/quest";
 
-/** Pick an image URL by usage with safe fallbacks */
+/** Pick a quest image URL by usage with safe fallbacks */
 function pickQuestImageUrl(quest: Quest, usage: "square" | "wide"): string {
   const imgs = quest.backgroundImages ?? [];
   const exact = imgs.find((i) => i.usage === usage)?.url;
@@ -35,11 +40,11 @@ export default function QuestDetailPage() {
 
   const [copied, setCopied] = React.useState(false);
 
+  // Copy current URL to clipboard (with a DOM fallback)
   const handleShare = React.useCallback(async () => {
     try {
       await navigator.clipboard.writeText(window.location.href);
     } catch {
-      // fallback: execCommand
       const dummy = document.createElement("input");
       dummy.value = window.location.href;
       document.body.appendChild(dummy);
@@ -63,7 +68,7 @@ export default function QuestDetailPage() {
 
   return (
     <div className="w-full mx-auto">
-      {/* ====== TOP: Quest summary ====== */}
+      {/* ===== Summary ===== */}
       <section className="w-full rounded-2xl bg-[#1C1C1C] text-white shadow-[0_6px_28px_rgba(0,0,0,0.28)] p-6 sm:p-8 md:p-10">
         {/* Project row */}
         <div className="flex items-center justify-between gap-4">
@@ -115,14 +120,14 @@ export default function QuestDetailPage() {
         </div>
       </section>
 
-      {/* ====== Tasks ====== */}
+      {/* ===== Tasks ===== */}
       <div className="space-y-5 my-10">
-        {quest.tasks.map((task, i) => (
-          <TaskItem key={i} questId={questID} task={task} />
+        {quest.tasks.map((task) => (
+          <TaskItem key={task.id} questId={questID} task={task} />
         ))}
       </div>
 
-      {/* ====== Description ====== */}
+      {/* ===== Description ===== */}
       <h2 className="text-[32px] text-[#7F0019] font-extrabold mb-2">
         {t("description")}
       </h2>
@@ -130,7 +135,7 @@ export default function QuestDetailPage() {
         {getLText(quest.description, locale)}
       </p>
 
-      {/* ====== For you ====== */}
+      {/* ===== For you ===== */}
       <section className="mt-12">
         <h3 className="mb-4 text-[32px] font-extrabold text-[#7F0019]">
           FOR YOU
@@ -145,8 +150,8 @@ export default function QuestDetailPage() {
               backgroundImageUrl={pickQuestImageUrl(q, "square")}
               iconUrl={q.project.logoUrl}
               projectName={q.project.name}
-              title={getLText(q.title, locale)}
-              description={getLText(q.catchphrase, locale)}
+              title={q.title} // Pass LocalizedText, not string
+              description={q.catchphrase} // Pass LocalizedText, not string
               points={q.tasks.reduce((sum, task) => sum + task.points, 0)}
             />
           ))}
@@ -162,7 +167,7 @@ export default function QuestDetailPage() {
               strokeWidth={2.2}
               aria-hidden="true"
             />
-            <span>Explore more quest</span>
+            <span>Explore more quests</span>
           </Link>
         </div>
       </section>

@@ -1,10 +1,21 @@
-// -----------------------------------------------------------------------------
-// HeroCarousel
-// - Receives items (HeroQuest[]) and renders a looping carousel
-// - No behavior change from your original version; only ordering/comments cleanup
-// -----------------------------------------------------------------------------
-
 "use client";
+
+/**
+ * HeroCarousel
+ * ---------------------------------------------------------------------------
+ * - Receives items (HeroQuest[]) and renders a looping carousel.
+ * - Layout:
+ *    • Mobile: image on top (square)
+ *    • Desktop: left=text, right=image (wide ratio)
+ * - Behavior:
+ *    • Uses shadcn/ui Carousel with loop enabled.
+ *    • Tracks current slide via CarouselApi.
+ *    • Bottom controls: prev / up to 5 dots / next.
+ * - Accessibility:
+ *    • aria-labels for controls.
+ *    • Title/description are visible text.
+ * ---------------------------------------------------------------------------
+ */
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
@@ -29,14 +40,14 @@ import {
 export type HeroQuest = {
   id: string;
   backgroundImageUrl: string; // Right-side large image
-  iconUrl?: string; // Small icon (optional)
+  iconUrl?: string; // Optional small icon
   projectName: LocalizedText | string; // Project display name
   title: LocalizedText; // Large heading
-  description: LocalizedText; // Sub heading
-  points?: number; // Optional point label
+  description: LocalizedText; // Subheading
+  points?: number; // Optional points label
 };
 
-/** Normalize LocalizedText | string to a display string */
+/** Normalize LocalizedText|string to display string */
 function getText(value: LocalizedText | string, locale: "en" | "ja") {
   return typeof value === "string" ? value : getLText(value, locale);
 }
@@ -56,22 +67,21 @@ export default function HeroCarousel({
   const locale = (useLocale() as "en" | "ja") ?? "en";
   const total = items.length;
 
+  // Sync current index with carousel selection
   useEffect(() => {
-    if (!api) return; // or: return undefined;
+    if (api) {
+      setCurrent(api.selectedScrollSnap());
+      const onSelect = () => setCurrent(api.selectedScrollSnap());
 
-    // Initialize current index and subscribe to selection changes
-    setCurrent(api.selectedScrollSnap());
-    const onSelect = () => setCurrent(api.selectedScrollSnap());
-
-    api.on("select", onSelect);
-
-    return () => {
-      api.off("select", onSelect);
-    };
+      api.on("select", onSelect);
+      return () => {
+        api.off("select", onSelect);
+      };
+    }
   }, [api]);
 
   return (
-    <div className={cn("w-full", className)}>
+    <div className={cn("w-full z-0", className)}>
       <Carousel opts={{ loop: true, align: "start" }} setApi={setApi}>
         <CarouselContent>
           {items.map((q, i) => {
@@ -85,16 +95,11 @@ export default function HeroCarousel({
 
             return (
               <CarouselItem key={q.id ?? i}>
-                {/* Panel */}
+                {/* === Panel === */}
                 <div className="relative overflow-hidden rounded-2xl bg-[#1C1C1C] text-white shadow-[0_6px_28px_rgba(0,0,0,0.28)]">
-                  {/* Inner padding */}
                   <div className="p-4 sm:p-6 md:p-8">
-                    {/* Layout:
-                       - Mobile: image first (square)
-                       - Desktop: left=text, right=wide image
-                    */}
                     <div className="relative z-10 grid grid-cols-1 md:grid-cols-[1fr_560px] gap-4 md:gap-6 md:items-stretch">
-                      {/* Image (mobile first / desktop right) */}
+                      {/* --- Image (mobile top / desktop right) --- */}
                       <div className="relative order-1 md:order-2 w-full aspect-square md:aspect-[1340/525] md:max-w-[700px] md:self-stretch">
                         <Image
                           src={q.backgroundImageUrl}
@@ -106,7 +111,7 @@ export default function HeroCarousel({
                         />
                       </div>
 
-                      {/* Text block */}
+                      {/* --- Text block --- */}
                       <div className="order-2 md:order-1 flex flex-col gap-3 md:gap-4 md:h-full md:justify-between">
                         {/* Top row: icon + project name */}
                         <div className="flex items-center gap-3">
@@ -158,6 +163,7 @@ export default function HeroCarousel({
                                   "linear-gradient(90deg, #D5B77A 0%, #FFFFFF 100%)",
                               }}
                             >
+                              {/* blurred glow background */}
                               <span
                                 aria-hidden
                                 className="pointer-events-none absolute -inset-y-2 -left-2 -z-10"
@@ -193,8 +199,9 @@ export default function HeroCarousel({
           })}
         </CarouselContent>
 
-        {/* Bottom controls: Prev / dots(<=5) / Next */}
+        {/* === Bottom controls: Prev / Dots / Next === */}
         <div className="mt-3 flex items-center justify-center gap-4">
+          {/* Prev button */}
           <button
             type="button"
             aria-label="Previous"
@@ -204,6 +211,7 @@ export default function HeroCarousel({
             <ChevronLeft className="mx-auto h-6 w-6" strokeWidth={3} />
           </button>
 
+          {/* Dots (max 5) */}
           <div className="flex items-center gap-3">
             {Array.from({ length: Math.min(5, total) }).map((_, idx) => {
               const isActive = current % Math.min(5, total) === idx;
@@ -219,6 +227,7 @@ export default function HeroCarousel({
             })}
           </div>
 
+          {/* Next button */}
           <button
             type="button"
             aria-label="Next"
