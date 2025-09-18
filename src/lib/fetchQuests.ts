@@ -43,6 +43,7 @@ type FirestoreQuest = {
   /** Quest-specific settings stored in Firestore */
   settings: {
     heroCarouselOrder: number | null;
+    isVisible: boolean;
   };
 
   timestamps: {
@@ -66,43 +67,46 @@ export const fetchQuests = async (): Promise<Quest[]> => {
 
   const snapshot = await getDocs(q);
 
-  return snapshot.docs.map((doc) => {
-    const data = doc.data() as FirestoreQuest;
+  return snapshot.docs
+    .map((doc) => {
+      const data = doc.data() as FirestoreQuest;
 
-    // Map tasks with localized labels preserved
-    const tasks: QuestTask[] = data.tasks.map((task) => ({
-      id: task.id,
-      label: coerceLText(task.label),
-      points: task.points,
-      actionButton: task.actionButton
-        ? {
-          label: coerceLText(task.actionButton.label),
-          url: task.actionButton.url,
-        }
-        : undefined,
-    }));
+      // Map tasks with localized labels preserved
+      const tasks: QuestTask[] = data.tasks.map((task) => ({
+        id: task.id,
+        label: coerceLText(task.label),
+        points: task.points,
+        actionButton: task.actionButton
+          ? {
+              label: coerceLText(task.actionButton.label),
+              url: task.actionButton.url,
+            }
+          : undefined,
+      }));
 
-    // Compose domain Quest
-    const quest: Quest = {
-      id: doc.id,
-      project: {
-        name: coerceLText(data.project.name),
-        logoUrl: data.project.logoUrl,
-      },
-      title: coerceLText(data.title),
-      description: coerceLText(data.description ?? ""),
-      catchphrase: coerceLText(data.catchphrase ?? ""),
-      backgroundImages: data.backgroundImages,
-      tasks,
-      settings: {
-        heroCarouselOrder: data.settings.heroCarouselOrder,
-      },
-      timestamps: {
-        createdAt: data.timestamps.createdAt.toDate(),
-        updatedAt: data.timestamps.updatedAt.toDate(),
-      },
-    };
+      // Compose domain Quest
+      const quest: Quest = {
+        id: doc.id,
+        project: {
+          name: coerceLText(data.project.name),
+          logoUrl: data.project.logoUrl,
+        },
+        title: coerceLText(data.title),
+        description: coerceLText(data.description ?? ""),
+        catchphrase: coerceLText(data.catchphrase ?? ""),
+        backgroundImages: data.backgroundImages,
+        tasks,
+        settings: {
+          heroCarouselOrder: data.settings.heroCarouselOrder,
+          isVisible: data.settings.isVisible,
+        },
+        timestamps: {
+          createdAt: data.timestamps.createdAt.toDate(),
+          updatedAt: data.timestamps.updatedAt.toDate(),
+        },
+      };
 
-    return quest;
-  });
+      return quest;
+    })
+    .filter((quest) => quest.settings.isVisible);
 };

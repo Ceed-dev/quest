@@ -51,6 +51,9 @@ export type Quest = {
   settings: {
     /** Order in HeroCarousel (null = not shown, 1..N = display order) */
     heroCarouselOrder: number | null;
+
+    /** Controls whether the quest is visible on the platform */
+    isVisible: boolean;
   };
 
   /** Record timestamps */
